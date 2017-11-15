@@ -73,7 +73,20 @@ public class ConnectionTestTeleop extends OpMode {
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
+        telemetry.addData("Say", "Hello Driver");
+        robot.upper_grip.setPosition(0);
+        robot.lower_grip.setPosition(0);
+
+
+        if (robot.upper_grip.getPosition() != 0.00){
+            telemetry.addData("upper servo", "not at zero");
+
+        }
+
+        if (robot.lower_grip.getPosition() != 0.00){
+            telemetry.addData("lower servo", "not at zero");
+
+        }
     }
 
     public void loop() {
