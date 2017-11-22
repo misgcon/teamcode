@@ -34,34 +34,39 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.robotcore.internal.ui.GamepadUser;
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
  * The code is structured as an Iterative OpMode
- *
+ * <p>
  * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
  * All device access is managed through the HardwarePushbot class.
- *
+ * <p>
  * This particular OpMode executes a basic Tank Drive Teleop for a PushBot
  * It raises and lowers the claw using the Gampad Y and A buttons respectively.
  * It also opens and closes the claws slowly using the left and right Bumper buttons.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Pushbot: Teleop Tank", group="Pushbot")
+@TeleOp(name = "Pushbot: Teleop Tank", group = "Pushbot")
 //@Disabled
 public class ConnectionTestTeleop extends OpMode {
 
 
-    static final double INCREMENT   = 0.01; //The increment of speed in the servo
-    double  position = 0.0;
+    static final double INCREMENT = 0.01; //The increment of speed in the servo
+    double position = 0.0;
+    double speedDecrease = 2.0;
+    boolean reverse = false;
+    boolean reverese_pressed = false;
 
     /* Declare OpMode members. */
     HardwareConnection robot = new HardwareConnection(); // use the class created to define a Pushbot's hardware
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -74,7 +79,7 @@ public class ConnectionTestTeleop extends OpMode {
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");
-        robot.upper_grip.setPosition(0);
+        /*robot.upper_grip.setPosition(0);
         robot.lower_grip.setPosition(0);
 
 
@@ -87,40 +92,60 @@ public class ConnectionTestTeleop extends OpMode {
             telemetry.addData("lower servo", "not at zero");
 
         }
+    */
     }
 
     public void loop() {
         double left;
         double right;
-        //double sides
+        double sides;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
-        //sides = -gamepad1.left_stick_x;
+        sides = -gamepad1.left_stick_x;
 
-        robot.motor_left_front.setPower(left / 2);
-        robot.motor_left_back.setPower(left / 2);
-        robot.motor_right_front.setPower(right / 2);
-        robot.motor_right_back.setPower(right / 2);
-        //robot.motor_middle.setPower(sides);
-
-        // Use gamepad up and down buttons to open and close the claw
-        if (gamepad1.dpad_up && position != 1.0) {
-            robot.upper_grip.setPosition(position+=INCREMENT);
-            robot.lower_grip.setPosition(position+=INCREMENT);
-
-        }
-        if (gamepad1.dpad_down && position != 0.0){
-            robot.upper_grip.setPosition(position-=INCREMENT);
-            robot.lower_grip.setPosition(position-=INCREMENT);
-
+        if (gamepad1.y) {
+            if (!reverese_pressed) {
+                reverse = !reverse;
+                reverese_pressed = true;
+            }
+        } else {
+            reverese_pressed = false;
         }
 
 
-        //if (position == 1.0){
-       //     telemetry.addLine("max position");
-       // }
+        if (reverse) {
+            left = -left;
+            right = -right;
+        }
+
+        robot.motor_left_front.setPower(left / speedDecrease);
+        robot.motor_left_back.setPower(left / speedDecrease);
+        robot.motor_right_front.setPower(right / speedDecrease);
+        robot.motor_right_back.setPower(right / speedDecrease);
+        robot.motor_middle.setPower(sides / speedDecrease);
+
+        // Use gamepad up and down buttons to open and close the grip
+        if (gamepad1.dpad_up && !gamepad1.dpad_down) {
+            robot.upper_grip.setPosition(1.0);
+            robot.lower_grip.setPosition(1.0);
+        }
+
+        if (!gamepad1.dpad_up && gamepad1.dpad_down) {
+            robot.upper_grip.setPosition(0.0);
+            robot.lower_grip.setPosition(0.0);
+        }
+
+        telemetry.addData("upper grip position ", robot.upper_grip.getPosition());
+        telemetry.addData("lower grip position ", robot.lower_grip.getPosition());
+        telemetry.addData("left ", left);
+        telemetry.addData("right ", right);
+        telemetry.addData("sides ", sides / speedDecrease);
+        telemetry.addData("reverse ", reverse);
+        telemetry.update();
 
     }
+
 }
+

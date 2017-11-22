@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -59,12 +60,10 @@ public class HardwareConnection
     public DcMotor motor_right_back;
     public Servo upper_grip;
     public Servo lower_grip;
-    //public DcMotor motor_middle;
-
-
+    public DcMotor motor_middle;
 
     /* local OpMode members. */
-    HardwareMap hwMap           =  null;
+    HardwareMap hwMap =  null;
 
     /* Constructor */
     public HardwareConnection(){
@@ -81,27 +80,26 @@ public class HardwareConnection
         motor_left_front = hwMap.get(DcMotor.class, "motor_left_front");
         motor_right_back = hwMap.get(DcMotor.class, "motor_right_back");
         motor_right_front = hwMap.get(DcMotor.class, "motor_right_front");
-        //motor_middle    = hwMap.get(DcMotor.class, "motor_middle");
+        motor_middle = hwMap.get(DcMotor.class, "motor_middle");
         upper_grip = hwMap.get(Servo.class, "upper_grip");
         lower_grip = hwMap.get(Servo.class, "lower_grip");
 
-
         motor_left_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
-        motor_right_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        motor_left_front.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        //motor_middle.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motor_left_front.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
+        motor_right_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        motor_right_front.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        motor_middle.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
 
         // Set all motors to zero power
         motor_left_back.setPower(0);
         motor_left_front.setPower(0);
         motor_right_back.setPower(0);
         motor_right_front.setPower(0);
-        // motor_middle.setPower(0);
+        motor_middle.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        // motor_middle.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor_middle.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor_right_front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor_right_back.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor_left_front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
