@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -58,9 +59,12 @@ public class HardwareConnection
     public DcMotor motor_left_back;
     public DcMotor motor_right_front;
     public DcMotor motor_right_back;
+    public DcMotor motor_middle;
     public Servo upper_grip;
     public Servo lower_grip;
-    public DcMotor motor_middle;
+    //public Servo ball_hand;
+    //ColorSensor colorSensor;
+
 
     /* local OpMode members. */
     HardwareMap hwMap =  null;
@@ -83,11 +87,15 @@ public class HardwareConnection
         motor_middle = hwMap.get(DcMotor.class, "motor_middle");
         upper_grip = hwMap.get(Servo.class, "upper_grip");
         lower_grip = hwMap.get(Servo.class, "lower_grip");
+        //ball_hand = hwMap.get(Servo.class, "ball_hand");
 
-        motor_left_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        motor_left_front.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
-        motor_right_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        motor_right_front.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        //colorSensor = hwMap.get(ColorSensor.class, "sensor_color");
+
+
+        motor_left_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
+        motor_right_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motor_right_front.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         motor_middle.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
 
         // Set all motors to zero power
@@ -96,6 +104,10 @@ public class HardwareConnection
         motor_right_back.setPower(0);
         motor_right_front.setPower(0);
         motor_middle.setPower(0);
+
+        upper_grip.setPosition(0.0);
+        lower_grip.setPosition(0.0);
+        //ball_hand.setPosition(0.0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.

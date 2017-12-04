@@ -38,23 +38,10 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.internal.ui.GamepadUser;
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
-/**
- * This file provides basic Telop driving for a Pushbot robot.
- * The code is structured as an Iterative OpMode
- * <p>
- * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
- * All device access is managed through the HardwarePushbot class.
- * <p>
- * This particular OpMode executes a basic Tank Drive Teleop for a PushBot
- * It raises and lowers the claw using the Gampad Y and A buttons respectively.
- * It also opens and closes the claws slowly using the left and right Bumper buttons.
- * <p>
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
 
-@TeleOp(name = "Pushbot: Teleop Tank", group = "Pushbot")
-//@Disabled
+
+@TeleOp(name = "driveCode", group = "Pushbot")
+
 public class ConnectionTestTeleop extends OpMode {
 
 
@@ -102,7 +89,7 @@ public class ConnectionTestTeleop extends OpMode {
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
+        right = gamepad1.right_stick_y;
         sides = -gamepad1.left_stick_x;
 
         if (gamepad1.y) {
@@ -120,16 +107,16 @@ public class ConnectionTestTeleop extends OpMode {
             right = -right;
         }
 
-        robot.motor_left_front.setPower(left / speedDecrease);
-        robot.motor_left_back.setPower(left / speedDecrease);
-        robot.motor_right_front.setPower(right / speedDecrease);
-        robot.motor_right_back.setPower(right / speedDecrease);
-        robot.motor_middle.setPower(sides / speedDecrease);
+        robot.motor_left_front.setPower(-left / speedDecrease);
+        robot.motor_left_back.setPower(-left / speedDecrease);
+        robot.motor_right_front.setPower(-right / speedDecrease);
+        robot.motor_right_back.setPower(-right / speedDecrease);
+        robot.motor_middle.setPower(sides);
 
         // Use gamepad up and down buttons to open and close the grip
         if (gamepad1.dpad_up && !gamepad1.dpad_down) {
-            robot.upper_grip.setPosition(1.0);
-            robot.lower_grip.setPosition(1.0);
+            robot.upper_grip.setPosition(0.01);
+            robot.lower_grip.setPosition(0.01);
         }
 
         if (!gamepad1.dpad_up && gamepad1.dpad_down) {
