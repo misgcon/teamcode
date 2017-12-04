@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * each auto mode should call function apolloRun.
  */
 public abstract class autoMain extends LinearOpMode {
-    //ColorSensor colorSensor;
+    ColorSensor colorSensor;
     static private double FORWORD_SPEED = 1.0;
     private ElapsedTime runtime = new ElapsedTime();
     public enum Column {
@@ -34,9 +34,10 @@ public abstract class autoMain extends LinearOpMode {
     // Balls task: Move the ball with the other color aside.
     private void dropBall(boolean isBlue) {
         // TODO(): Avital.
-        /*int howBlue = colorSensor.blue();
+        robot.ball_hand.setPosition(0.0);
+        robot.ball_hand.setPosition(0.6);
+        int howBlue = colorSensor.blue();
         int howRed = colorSensor.red();
-        //robot.ball_hand.setPosition(0.5);
         if (isBlue) {
             if (colorSensor.blue() >= howBlue){
                 robot.motor_right_back.setPower(FORWORD_SPEED);
@@ -98,7 +99,9 @@ public abstract class autoMain extends LinearOpMode {
             }
 
         }
-        */
+
+        robot.ball_hand.setPosition(0.0);
+
     }
 
 

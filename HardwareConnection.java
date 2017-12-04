@@ -62,7 +62,7 @@ public class HardwareConnection
     public DcMotor motor_middle;
     public Servo upper_grip;
     public Servo lower_grip;
-    //public Servo ball_hand;
+    public Servo ball_hand;
     //ColorSensor colorSensor;
 
 
