@@ -24,6 +24,11 @@ public abstract class autoMain extends LinearOpMode {
     HardwareConnection robot = new HardwareConnection();
 
     void connectionRun(boolean isBlue, boolean leftSide){
+
+        robot.init(hardwareMap);
+
+        waitForStart();
+
         dropBall(isBlue);
         Column column = readPhoto();
         moveToCryptoBox(isBlue, leftSide);
@@ -34,75 +39,32 @@ public abstract class autoMain extends LinearOpMode {
     // Balls task: Move the ball with the other color aside.
     private void dropBall(boolean isBlue) {
         // TODO(): Avital.
+        //robot.ball_hand.setPosition(0.7);
+        boolean isBallBlue = colorSensor.blue() >= 0.1;
+        telemetry.addData("color sensor sees ", colorSensor.blue());
+
+        if (isBlue == isBallBlue) {
+
+            robot.setALLMotorDrivePower(FORWORD_SPEED);
+
+                while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+                    idle();
+                }
+            robot.setALLMotorDrivePower(0);
+            }
+            else{
+
+                robot.setALLMotorDrivePower(FORWORD_SPEED);
+
+                while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+                    idle();
+                }
+            robot.setALLMotorDrivePower(0);
+            }
         robot.ball_hand.setPosition(0.0);
-        robot.ball_hand.setPosition(0.6);
-        int howBlue = colorSensor.blue();
-        int howRed = colorSensor.red();
-        if (isBlue) {
-            if (colorSensor.blue() >= howBlue){
-                robot.motor_right_back.setPower(FORWORD_SPEED);
-                robot.motor_left_back.setPower(FORWORD_SPEED);
-                robot.motor_right_front.setPower(FORWORD_SPEED);
-                robot.motor_left_front.setPower(FORWORD_SPEED);
-
-                while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-                    idle();
-                }
-                robot.motor_right_back.setPower(0);
-                robot.motor_left_back.setPower(0);
-                robot.motor_right_front.setPower(0);
-                robot.motor_left_front.setPower(0);
-            }
-            else if (colorSensor.blue() < howBlue) {
-                robot.motor_right_back.setPower(-FORWORD_SPEED);
-                robot.motor_left_back.setPower(-FORWORD_SPEED);
-                robot.motor_right_front.setPower(-FORWORD_SPEED);
-                robot.motor_left_front.setPower(-FORWORD_SPEED);
-
-                while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-                    idle();
-                }
-                robot.motor_right_back.setPower(0);
-                robot.motor_left_back.setPower(0);
-                robot.motor_right_front.setPower(0);
-                robot.motor_left_front.setPower(0);
-            }
-        }
-        else if (!isBlue) {
-            if (colorSensor.red() >= howRed){
-                robot.motor_right_back.setPower(FORWORD_SPEED);
-                robot.motor_left_back.setPower(FORWORD_SPEED);
-                robot.motor_right_front.setPower(FORWORD_SPEED);
-                robot.motor_left_front.setPower(FORWORD_SPEED);
-
-                while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-                    idle();
-                }
-                robot.motor_right_back.setPower(0);
-                robot.motor_left_back.setPower(0);
-                robot.motor_right_front.setPower(0);
-                robot.motor_left_front.setPower(0);
-            }
-            else if (colorSensor.blue() < howBlue) {
-                robot.motor_right_back.setPower(-FORWORD_SPEED);
-                robot.motor_left_back.setPower(-FORWORD_SPEED);
-                robot.motor_right_front.setPower(-FORWORD_SPEED);
-                robot.motor_left_front.setPower(-FORWORD_SPEED);
-
-                while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-                    idle();
-                }
-                robot.motor_right_back.setPower(0);
-                robot.motor_left_back.setPower(0);
-                robot.motor_right_front.setPower(0);
-                robot.motor_left_front.setPower(0);
-            }
-
         }
 
-        robot.ball_hand.setPosition(0.0);
 
-    }
 
 
     // Read photo and return the column to put the cube in.

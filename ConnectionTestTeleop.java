@@ -47,9 +47,9 @@ public class ConnectionTestTeleop extends OpMode {
 
     static final double INCREMENT = 0.01; //The increment of speed in the servo
     double position = 0.0;
-    double speedDecrease = 2.0;
-    boolean reverse = false;
-    boolean reverese_pressed = false;
+    private double speedDecrease = 2.0;
+    private boolean reverse = false;
+    private boolean reverese_pressed = false;
 
     /* Declare OpMode members. */
     HardwareConnection robot = new HardwareConnection(); // use the class created to define a Pushbot's hardware
@@ -66,31 +66,20 @@ public class ConnectionTestTeleop extends OpMode {
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Connection", "Starting");
-        /*robot.upper_grip.setPosition(0);
-        robot.lower_grip.setPosition(0);
-
-
-        if (robot.upper_grip.getPosition() != 0.00){
-            telemetry.addData("upper servo", "not at zero");
-
-        }
-
-        if (robot.lower_grip.getPosition() != 0.00){
-            telemetry.addData("lower servo", "not at zero");
-
-        }
-    */
     }
 
     public void loop() {
         double left;
         double right;
-        double sides;
+        double up;
+       // double sides;
+
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
-        sides = -gamepad1.left_stick_x;
+        up = gamepad2.right_stick_y;
+        //sides = -gamepad1.left_stick_x;
 
         if (gamepad1.y) {
             if (!reverese_pressed) {
@@ -111,24 +100,25 @@ public class ConnectionTestTeleop extends OpMode {
         robot.motor_left_back.setPower(-left / speedDecrease);
         robot.motor_right_front.setPower(-right / speedDecrease);
         robot.motor_right_back.setPower(-right / speedDecrease);
-        robot.motor_middle.setPower(sides);
+        robot.motor_elevator.setPower(up);
+        //robot.motor_middle.setPower(sides);
 
         // Use gamepad up and down buttons to open and close the grip
-        if (gamepad1.dpad_up && !gamepad1.dpad_down) {
-            robot.upper_grip.setPosition(0.01);
-            robot.lower_grip.setPosition(0.01);
+        if (gamepad2.dpad_up && !gamepad2.dpad_down) {
+            robot.upper_grip.setPosition(0.0);//to be lucky this time
+            robot.lower_grip.setPosition(0.0);
         }
 
-        if (!gamepad1.dpad_up && gamepad1.dpad_down) {
-            robot.upper_grip.setPosition(0.0);
-            robot.lower_grip.setPosition(0.0);
+        if (!gamepad2.dpad_up && gamepad2.dpad_down) {
+            robot.upper_grip.setPosition(1.0);
+            robot.lower_grip.setPosition(1.0);
         }
 
         telemetry.addData("upper grip position ", robot.upper_grip.getPosition());
         telemetry.addData("lower grip position ", robot.lower_grip.getPosition());
         telemetry.addData("left ", left);
         telemetry.addData("right ", right);
-        telemetry.addData("sides ", sides / speedDecrease);
+        //telemetry.addData("sides ", sides / speedDecrease);
         telemetry.addData("reverse ", reverse);
         telemetry.update();
 

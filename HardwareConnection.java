@@ -38,28 +38,28 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This is NOT an opmode.
- *
+ * <p>
  * This class can be used to define all the specific hardware for a single robot.
  * In this case that robot is a Pushbot.
  * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
- *
+ * <p>
  * This hardware class assumes the following device names have been configured on the robot:
  * Note:  All names are lower case and some have single spaces between words.
- *
+ * <p>
  * Motor channel:  Left  drive motor:        "left_drive"
  * Motor channel:  Right drive motor:        "right_drive"
  * Motor channel:  Manipulator drive motor:  "left_arm"
  * Servo channel:  Servo to open left claw:  "left_hand"
  * Servo channel:  Servo to open right claw: "right_hand"
  */
-public class HardwareConnection
-{
+public class HardwareConnection {
     /* Public OpMode members. */
     public DcMotor motor_left_front;
     public DcMotor motor_left_back;
     public DcMotor motor_right_front;
     public DcMotor motor_right_back;
-    public DcMotor motor_middle;
+    public DcMotor motor_elevator;
+    //public DcMotor motor_middle;
     public Servo upper_grip;
     public Servo lower_grip;
     public Servo ball_hand;
@@ -67,10 +67,10 @@ public class HardwareConnection
 
 
     /* local OpMode members. */
-    HardwareMap hwMap =  null;
+    HardwareMap hwMap = null;
 
     /* Constructor */
-    public HardwareConnection(){
+    public HardwareConnection() {
 
     }
 
@@ -84,38 +84,71 @@ public class HardwareConnection
         motor_left_front = hwMap.get(DcMotor.class, "motor_left_front");
         motor_right_back = hwMap.get(DcMotor.class, "motor_right_back");
         motor_right_front = hwMap.get(DcMotor.class, "motor_right_front");
-        motor_middle = hwMap.get(DcMotor.class, "motor_middle");
+        motor_elevator = hwMap.get(DcMotor.class, "motor_grip_lifter");
+        //motor_middle = hwMap.get(DcMotor.class, "motor_middle");
         upper_grip = hwMap.get(Servo.class, "upper_grip");
         lower_grip = hwMap.get(Servo.class, "lower_grip");
-        //ball_hand = hwMap.get(Servo.class, "ball_hand");
+        ball_hand = hwMap.get(Servo.class, "ball_hand");
 
-        //colorSensor = hwMap.get(ColorSensor.class, "sensor_color");
-
+        colorSensor = hwMap.get(ColorSensor.class, "sensor_color");
 
         motor_left_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
         motor_right_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         motor_right_front.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        motor_middle.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motor_elevator.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        //motor_middle.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
 
         // Set all motors to zero power
-        motor_left_back.setPower(0);
-        motor_left_front.setPower(0);
-        motor_right_back.setPower(0);
-        motor_right_front.setPower(0);
-        motor_middle.setPower(0);
 
-        upper_grip.setPosition(0.0);
-        lower_grip.setPosition(0.0);
-        //ball_hand.setPosition(0.0);
+        setALLMotorDrivePower(0);
+        motor_elevator.setPower(0);
+
+
+
+        setGripPosition(0.0);
+        //ball_hand.setPosition(1.4);
+
+
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        motor_middle.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor_right_front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor_right_back.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor_left_front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor_left_back.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+
+    public void setALLMotorDrivePower(double speed) {  //short cut to power all the DC_motors
+        motor_left_front.setPower(speed);
+        motor_left_back.setPower(speed);
+        motor_right_front.setPower(speed);
+        motor_right_back.setPower(speed);
+    }
+    public void setLEFTMotorDrivePower(double speed) {  //short cut to power all the DC_motors
+        motor_left_front.setPower(speed);
+        motor_left_back.setPower(speed);
+
+    }
+    public void setRIGHTDrivePower(double speed) {  //short cut to power all the DC_motors
+        motor_right_front.setPower(speed);
+        motor_right_back.setPower(speed);
+    }
+
+    public void setGripPosition (double position) {
+        upper_grip.setPosition(position);
+        lower_grip.setPosition(position);
+
+    }
+
+    public void setMotorDriveMode (DcMotor.RunMode runMode){
+        //motor_middle.setMode(runMode);
+        motor_right_front.setMode(runMode);
+        motor_right_back.setMode(runMode);
+        motor_left_front.setMode(runMode);
+        motor_left_back.setMode(runMode);
+        motor_elevator.setMode(runMode);
+    }
+
+
+
 }
 
