@@ -3,9 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+//import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * Created by itay on 15/11/2017.
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 public abstract class autoMain extends LinearOpMode {
     ColorSensor colorSensor;
-    static private double FORWORD_SPEED = 1.0;
+    static private double FORWORD_SPEED = 0.4;
     private ElapsedTime runtime = new ElapsedTime();
     public enum Column {
         LEFT, CENTER, RIGHT
@@ -38,34 +39,49 @@ public abstract class autoMain extends LinearOpMode {
 
     // Balls task: Move the ball with the other color aside.
     private void dropBall(boolean isBlue) {
+        colorSensor = hardwareMap.get(ColorSensor.class, "cSensor_ballArm");
         // TODO(): Avital.
-        //robot.ball_hand.setPosition(0.7);
-        boolean isBallBlue = colorSensor.blue() >= 0.1;
-        telemetry.addData("color sensor sees ", colorSensor.blue());
+        robot.ball_hand.setPosition(1);
+        sleep(1000);
+        robot.ball_hand.setPosition(2);
+        /*for (int i = 0; i >= 100; i++){
+           int x = 1;
+           robot.ball_hand.setPosition(x);
+           x++;
+           sleep(100);
+        }
+        */
 
-        if (isBlue == isBallBlue) {
+        sleep(1000);
 
-            robot.setALLMotorDrivePower(FORWORD_SPEED);
-
-                while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-                    idle();
-                }
-            robot.setALLMotorDrivePower(0);
+        runtime.reset();
+        boolean isBallColorDetected = false;
+        boolean isBallBlue = false;
+        while (opModeIsActive() && (runtime.seconds() < 2)) {
+            if (robot.colorSensor.blue() >= 27) {
+                isBallBlue = true;
+                isBallColorDetected = true;
+                break;
             }
-            else{
-
-                robot.setALLMotorDrivePower(FORWORD_SPEED);
-
-                while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-                    idle();
-                }
-            robot.setALLMotorDrivePower(0);
+            if (robot.colorSensor.red() >= 27) {
+                isBallBlue = false;
+                isBallColorDetected = true;
+                break;
             }
-        robot.ball_hand.setPosition(0.0);
+            idle();
         }
 
-
-
+        if (isBallColorDetected) {
+            if (isBlue == isBallBlue) {
+                driveStrait(-FORWORD_SPEED, 0.3);
+            } else {
+                driveStrait(FORWORD_SPEED, 0.3);
+            }
+        }
+        robot.ball_hand.setPosition(0.0);
+        sleep(2000);
+        driveStrait(FORWORD_SPEED, 3);
+    }
 
     // Read photo and return the column to put the cube in.
     private Column readPhoto(){
@@ -85,7 +101,44 @@ public abstract class autoMain extends LinearOpMode {
 
     // Park the robot
     private void goToSafeZone (){
-        // TODO(): implement.
+        // TODO(): Itay.S
+
+        robot.setALLMotorDrivePower(1.0);
+
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+            idle();
+        }
+        robot.setALLMotorDrivePower(0.0);
+    }
+
+    void driveStrait(double speed, double seconds) {
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.setALLMotorDrivePower(speed);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < seconds)) {
+            idle();
+        }
+        robot.setALLMotorDrivePower(0);
+    }
+
+    void driveStraitWithEncoder(double speed, int ticks) {
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.setALLMotorDrivePower(ticks > 0 ? speed : -speed);
+
+        int targetPosition = robot.motor_left_back.getCurrentPosition() + ticks;
+        while (opModeIsActive()) {
+            if (ticks > 0 && robot.motor_left_back.getCurrentPosition() >= targetPosition) {
+                break;
+            }
+            if (ticks < 0 && robot.motor_left_back.getCurrentPosition() <= targetPosition) {
+                break;
+            }
+
+            idle();
+        }
+        robot.setALLMotorDrivePower(0);
     }
 
 

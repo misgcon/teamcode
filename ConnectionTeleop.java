@@ -36,13 +36,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.internal.ui.GamepadUser;
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+//import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 
 
 @TeleOp(name = "driveCode", group = "Pushbot")
 
-public class ConnectionTestTeleop extends OpMode {
+public class ConnectionTeleop extends OpMode {
 
 
     static final double INCREMENT = 0.01; //The increment of speed in the servo
@@ -107,11 +107,24 @@ public class ConnectionTestTeleop extends OpMode {
         if (gamepad2.dpad_up && !gamepad2.dpad_down) {
             robot.upper_grip.setPosition(0.0);//to be lucky this time
             robot.lower_grip.setPosition(0.0);
+            //robot.closeGrip();
         }
 
         if (!gamepad2.dpad_up && gamepad2.dpad_down) {
             robot.upper_grip.setPosition(1.0);
             robot.lower_grip.setPosition(1.0);
+            //robot.openGrip();
+        }
+
+        if (gamepad1.left_bumper && !gamepad1.right_bumper){
+            robot.motor_middle.setPower(1.0);
+        }
+
+        if (!gamepad1.left_bumper && gamepad1.right_bumper){
+            robot.motor_middle.setPower(-1.0);
+        }
+        if (!gamepad1.right_bumper && !gamepad1.right_bumper) {
+            robot.motor_middle.setPower(0.0);
         }
 
         telemetry.addData("upper grip position ", robot.upper_grip.getPosition());
