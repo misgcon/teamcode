@@ -16,7 +16,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 public abstract class autoMain extends LinearOpMode {
     ColorSensor colorSensor;
-    static private double FORWORD_SPEED = 0.4;
+    static private double FORWORD_SPEED = 0.2;
+    static private double BACKWORD_SPEED = 0.2;
     private ElapsedTime runtime = new ElapsedTime();
     public enum Column {
         LEFT, CENTER, RIGHT
@@ -28,29 +29,40 @@ public abstract class autoMain extends LinearOpMode {
 
         robot.init(hardwareMap);
 
+        telemetry.addData("version: ", "3.4");
+
+        telemetry.update();
+
         waitForStart();
 
-        dropBall(isBlue);
+        //driveStraitWithEncoder(FORWORD_SPEED, 1000);
+        driveStrait(FORWORD_SPEED, 4.5);
+
+        robot.setGripPosition(0);
+        driveStrait(-FORWORD_SPEED, 0.5);
+
+
+
+         /*
+        dropBall(isBlue, leftSide);
+
         Column column = readPhoto();
         moveToCryptoBox(isBlue, leftSide);
         putCube (column);
         goToSafeZone();
+        */
     }
 
     // Balls task: Move the ball with the other color aside.
-    private void dropBall(boolean isBlue) {
+    private void dropBall(boolean isBlue, boolean leftSide) {
         colorSensor = hardwareMap.get(ColorSensor.class, "cSensor_ballArm");
         // TODO(): Avital.
-        robot.ball_hand.setPosition(1);
+
+        /*
+        robot.ball_hand.setPosition(0.5);
         sleep(1000);
-        robot.ball_hand.setPosition(2);
-        /*for (int i = 0; i >= 100; i++){
-           int x = 1;
-           robot.ball_hand.setPosition(x);
-           x++;
-           sleep(100);
-        }
-        */
+        robot.ball_hand.setPosition(0.95);
+
 
         sleep(1000);
 
@@ -58,12 +70,12 @@ public abstract class autoMain extends LinearOpMode {
         boolean isBallColorDetected = false;
         boolean isBallBlue = false;
         while (opModeIsActive() && (runtime.seconds() < 2)) {
-            if (robot.colorSensor.blue() >= 27) {
+            if (robot.colorSensor.blue() >= 26) {
                 isBallBlue = true;
                 isBallColorDetected = true;
                 break;
             }
-            if (robot.colorSensor.red() >= 27) {
+            if (robot.colorSensor.red() >= 24) {
                 isBallBlue = false;
                 isBallColorDetected = true;
                 break;
@@ -73,14 +85,22 @@ public abstract class autoMain extends LinearOpMode {
 
         if (isBallColorDetected) {
             if (isBlue == isBallBlue) {
-                driveStrait(-FORWORD_SPEED, 0.3);
+                driveStraitWithEncoder(FORWORD_SPEED,-150);
             } else {
-                driveStrait(FORWORD_SPEED, 0.3);
+                driveStraitWithEncoder(BACKWORD_SPEED,150);
             }
         }
         robot.ball_hand.setPosition(0.0);
         sleep(2000);
-        driveStrait(FORWORD_SPEED, 3);
+
+        */
+        if (isBlue){
+            driveStraitWithEncoder(FORWORD_SPEED, 1000);
+            //driveStraitLEFT(FORWORD_SPEED, 0.07);
+        }
+        else {
+            driveStraitWithEncoder(FORWORD_SPEED, -1000);
+        }
     }
 
     // Read photo and return the column to put the cube in.
@@ -115,7 +135,7 @@ public abstract class autoMain extends LinearOpMode {
 
     void driveStrait(double speed, double seconds) {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.setALLMotorDrivePower(speed);
+        robot.setDriveMotorsPowerNoMiddle(speed);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < seconds)) {
             idle();
@@ -123,11 +143,21 @@ public abstract class autoMain extends LinearOpMode {
         robot.setALLMotorDrivePower(0);
     }
 
+    void driveStraitLEFT (double speed, double seconds){
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.setLEFTMotorDrivePower(speed);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < seconds)) {
+            idle();
+        }
+        robot.setLEFTMotorDrivePower(0);
+    }
+
     void driveStraitWithEncoder(double speed, int ticks) {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.setALLMotorDrivePower(ticks > 0 ? speed : -speed);
-
         int targetPosition = robot.motor_left_back.getCurrentPosition() + ticks;
+
+        robot.setDriveMotorsPowerNoMiddle(ticks > 0 ? speed : -speed);
         while (opModeIsActive()) {
             if (ticks > 0 && robot.motor_left_back.getCurrentPosition() >= targetPosition) {
                 break;

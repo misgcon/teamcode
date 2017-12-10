@@ -124,6 +124,12 @@ public class HardwareConnection {
         motor_right_back.setPower(speed);
         motor_middle.setPower(speed);
     }
+    public void setDriveMotorsPowerNoMiddle (double speed){
+        motor_left_front.setPower(speed);
+        motor_left_back.setPower(speed);
+        motor_right_front.setPower(speed);
+        motor_right_back.setPower(speed);
+    }
 
     public void setLEFTMotorDrivePower(double speed) {  //short cut to power all the DC_motors
         motor_left_front.setPower(speed);

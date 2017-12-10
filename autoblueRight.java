@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * Created by itay on 20/11/2017.
  */
 @Autonomous(name="autoBlueRight", group="Pushbot")
-
+@Disabled
 public class autoblueRight extends autoMain {
 
     @Override
