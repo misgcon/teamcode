@@ -29,13 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcore.internal.ui.GamepadUser;
 //import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 
@@ -96,9 +91,9 @@ public class ConnectionTeleop extends OpMode {
             right = -right;
         }
 
-        robot.motor_left_front.setPower(-left / speedDecrease);
+        robot.motor_left.setPower(-left / speedDecrease);
         robot.motor_left_back.setPower(-left / speedDecrease);
-        robot.motor_right_front.setPower(-right / speedDecrease);
+        robot.motor_right.setPower(-right / speedDecrease);
         robot.motor_right_back.setPower(-right / speedDecrease);
         robot.motor_elevator.setPower(up);
         //robot.motor_middle.setPower(sides);

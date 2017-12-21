@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -64,8 +63,8 @@ public class motorSpeedTest extends LinearOpMode {
 
         robot.motor_left_back.setPower(MAX_SPEED);
         robot.motor_right_back.setPower(MAX_SPEED);
-        robot.motor_left_front.setPower(MAX_SPEED);
-        robot.motor_right_front.setPower(MAX_SPEED);
+        robot.motor_left.setPower(MAX_SPEED);
+        robot.motor_right.setPower(MAX_SPEED);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.0)) {
@@ -76,8 +75,8 @@ public class motorSpeedTest extends LinearOpMode {
 
         robot.motor_left_back.setPower(FORWARD_SPEED);
         robot.motor_right_back.setPower(FORWARD_SPEED);
-        robot.motor_left_front.setPower(FORWARD_SPEED);
-        robot.motor_right_front.setPower(FORWARD_SPEED);
+        robot.motor_left.setPower(FORWARD_SPEED);
+        robot.motor_right.setPower(FORWARD_SPEED);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.0)) {
@@ -86,8 +85,8 @@ public class motorSpeedTest extends LinearOpMode {
             telemetry.update();
         }
 
-        robot.motor_right_front.setPower(0);
-        robot.motor_left_front.setPower(0);
+        robot.motor_right.setPower(0);
+        robot.motor_left.setPower(0);
         robot.motor_left_back.setPower(0);
         robot.motor_right_back.setPower(0);
 
