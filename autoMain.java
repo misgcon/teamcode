@@ -153,21 +153,18 @@ public abstract class autoMain extends LinearOpMode {
         robot.setLEFTMotorDrivePower(0);
     }
 
-    void driveStraitWithEncoder(double speed, int ticks) {
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        int targetPosition = robot.motor_left_back.getCurrentPosition() + ticks;
+    public void driveStraitToTargetWithEncoder (double speed, int newTarget){
+        setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        resetEncoder();
+        int driveTarget = motor_left.getCurrentPosition() + newTarget;
+        motor_left.setTargetPosition(driveTarget);
+        while (opModeIsActive() &&
+                (runtime.seconds() < timeoutS) &&
+                (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())){
 
-        robot.setDriveMotorsPowerNoMiddle(ticks > 0 ? speed : -speed);
-        while (opModeIsActive()) {
-            if (ticks > 0 && robot.motor_left_back.getCurrentPosition() >= targetPosition) {
-                break;
-            }
-            if (ticks < 0 && robot.motor_left_back.getCurrentPosition() <= targetPosition) {
-                break;
-            }
-
-            idle();
         }
+
+    }
         robot.setALLMotorDrivePower(0);
     }
 
