@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 @Autonomous(name="Auto", group="Pushbot")
 //@Autonomous(name="autoBlueLeft", group="Pushbot")
 
-public class autoBlueLeft extends autoMain {
+public class autoBlueLeft extends org.firstinspires.ftc.teamcode.autoMain {
 
     @Override
     public void runOpMode() throws InterruptedException {

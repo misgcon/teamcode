@@ -34,7 +34,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 
-
 @TeleOp(name = "driveCode", group = "Pushbot")
 
 public class ConnectionTeleop extends OpMode {
@@ -42,12 +41,11 @@ public class ConnectionTeleop extends OpMode {
 
     static final double INCREMENT = 0.01; //The increment of speed in the servo
     double position = 0.0;
+    /* Declare OpMode members. */
+    HardwareConnection robot = new HardwareConnection(); // use the class created to define a Pushbot's hardware
     private double speedDecrease = 2.0;
     private boolean reverse = false;
     private boolean reverese_pressed = false;
-
-    /* Declare OpMode members. */
-    HardwareConnection robot = new HardwareConnection(); // use the class created to define a Pushbot's hardware
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -67,7 +65,7 @@ public class ConnectionTeleop extends OpMode {
         double left;
         double right;
         double up;
-       // double sides;
+        // double sides;
 
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
@@ -92,14 +90,11 @@ public class ConnectionTeleop extends OpMode {
         }
 
         robot.motor_left.setPower(-left / speedDecrease);
-        robot.motor_left_back.setPower(-left / speedDecrease);
+
         robot.motor_right.setPower(-right / speedDecrease);
-        robot.motor_right_back.setPower(-right / speedDecrease);
-        robot.motor_elevator.setPower(up);
-        //robot.motor_middle.setPower(sides);
 
         // Use gamepad up and down buttons to open and close the grip
-        if (gamepad2.dpad_up && !gamepad2.dpad_down) {
+        /*if (gamepad2.dpad_up && !gamepad2.dpad_down) {
             robot.upper_grip.setPosition(0.0);//to be lucky this time
             robot.lower_grip.setPosition(0.0);
             //robot.closeGrip();
@@ -129,7 +124,7 @@ public class ConnectionTeleop extends OpMode {
         //telemetry.addData("sides ", sides / speedDecrease);
         telemetry.addData("reverse ", reverse);
         telemetry.update();
-
+*/
     }
 
 }

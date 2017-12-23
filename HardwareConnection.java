@@ -65,8 +65,9 @@ public class HardwareConnection {
 
     /* Constructor */
     public HardwareConnection() {
-
     }
+
+
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
@@ -103,15 +104,14 @@ public class HardwareConnection {
 
     }
 
-    public void setLEFTMotorDrivePower(double speed) {  //short cut to power all the DC_motors
+    public void setLEFTMotorDrivePower(double speed) {  //short cut to power the left DC_motors
         motor_left.setPower(speed);
 
     }
 
-    public void setRIGHTDrivePower(double speed) {  //short cut to power all the DC_motors
+    public void setRIGHTDrivePower(double speed) {  //short cut to power the right DC_motors
         motor_right.setPower(speed);
     }
-
 
     public void setMotorDriveMode(DcMotor.RunMode runMode) {
         motor_right.setMode(runMode);
