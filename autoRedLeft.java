@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.autoMain;
  * Created by itay on 20/11/2017.
  */
 @Autonomous(name="autoRedLeft", group="Pushbot")
-@Disabled
+
 public class autoRedLeft extends autoMain {
 
     @Override

@@ -18,8 +18,7 @@ import java.net.PortUnreachableException;
  */
 public abstract class autoMain extends LinearOpMode {
     ColorSensor colorSensor;
-    static private double FORWORD_SPEED = 0.2;
-    static private double BACKWORD_SPEED = 0.2;
+    static private double FORWORD_SPEED = 0.4;
     private ElapsedTime runtime = new ElapsedTime();
     public enum Column {
         LEFT, CENTER, RIGHT
@@ -31,6 +30,7 @@ public abstract class autoMain extends LinearOpMode {
 
         robot.init(hardwareMap);
 
+<<<<<<< HEAD
         telemetry.addData("version: ", "4");
 
         telemetry.update();
@@ -40,17 +40,69 @@ public abstract class autoMain extends LinearOpMode {
 
         dropBall(isBlue, leftSide);
 
+=======
+        waitForStart();
+
+        dropBall(isBlue);
+>>>>>>> parent of 65036c2... final code before 1 comp
         Column column = readPhoto();
         moveToCryptoBox(isBlue, leftSide);
         putCube (column);
         goToSafeZone();
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 65036c2... final code before 1 comp
     }
 
     // Balls task: Move the ball with the other color aside.
-    private void dropBall(boolean isBlue, boolean leftSide) {
+    private void dropBall(boolean isBlue) {
         colorSensor = hardwareMap.get(ColorSensor.class, "cSensor_ballArm");
+<<<<<<< HEAD
         // TODO(): implement.
+=======
+        // TODO(): Avital.
+        robot.ball_hand.setPosition(1);
+        sleep(1000);
+        robot.ball_hand.setPosition(2);
+        /*for (int i = 0; i >= 100; i++){
+           int x = 1;
+           robot.ball_hand.setPosition(x);
+           x++;
+           sleep(100);
+        }
+        */
+
+        sleep(1000);
+
+        runtime.reset();
+        boolean isBallColorDetected = false;
+        boolean isBallBlue = false;
+        while (opModeIsActive() && (runtime.seconds() < 2)) {
+            if (robot.colorSensor.blue() >= 27) {
+                isBallBlue = true;
+                isBallColorDetected = true;
+                break;
+            }
+            if (robot.colorSensor.red() >= 27) {
+                isBallBlue = false;
+                isBallColorDetected = true;
+                break;
+            }
+            idle();
+        }
+
+        if (isBallColorDetected) {
+            if (isBlue == isBallBlue) {
+                driveStrait(-FORWORD_SPEED, 0.3);
+            } else {
+                driveStrait(FORWORD_SPEED, 0.3);
+            }
+        }
+        robot.ball_hand.setPosition(0.0);
+        sleep(2000);
+        driveStrait(FORWORD_SPEED, 3);
+>>>>>>> parent of 65036c2... final code before 1 comp
     }
 
     // Read photo and return the column to put the cube in.
@@ -93,6 +145,7 @@ public abstract class autoMain extends LinearOpMode {
         robot.setALLMotorDrivePower(0);
     }
 
+<<<<<<< HEAD
     void driveStraitLEFT (double speed, double seconds){
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.setLEFTMotorDrivePower(speed);
@@ -124,7 +177,20 @@ public abstract class autoMain extends LinearOpMode {
         robot.motor_right.setTargetPosition(rightTarget);
         robot.setALLMotorDrivePower(speed);
         while (opModeIsActive() && (robot.motor_left.isBusy()) && (robot.motor_right.isBusy())){
-            idle();
+=======
+    void driveStraitWithEncoder(double speed, int ticks) {
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.setALLMotorDrivePower(ticks > 0 ? speed : -speed);
+
+        int targetPosition = robot.motor_left_back.getCurrentPosition() + ticks;
+        while (opModeIsActive()) {
+            if (ticks > 0 && robot.motor_left_back.getCurrentPosition() >= targetPosition) {
+                break;
+            }
+            if (ticks < 0 && robot.motor_left_back.getCurrentPosition() <= targetPosition) {
+                break;
+            }
+
         }
         robot.setALLMotorDrivePower(0);
     }

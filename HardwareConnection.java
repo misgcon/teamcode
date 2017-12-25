@@ -99,8 +99,21 @@ public class HardwareConnection {
 
 
     public void setALLMotorDrivePower(double speed) {  //short cut to power all the DC_motors
+<<<<<<< HEAD
         motor_left.setPower(speed);
         motor_right.setPower(speed);
+=======
+        motor_left_front.setPower(speed);
+        motor_left_back.setPower(speed);
+        motor_right_front.setPower(speed);
+        motor_right_back.setPower(speed);
+        motor_middle.setPower(speed);
+    }
+
+    public void setLEFTMotorDrivePower(double speed) {  //short cut to power all the DC_motors
+        motor_left_front.setPower(speed);
+        motor_left_back.setPower(speed);
+>>>>>>> parent of 65036c2... final code before 1 comp
 
     }
 
