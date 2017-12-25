@@ -31,7 +31,7 @@ public abstract class autoMain extends LinearOpMode {
 
         robot.init(hardwareMap);
 
-        telemetry.addData("version: ", "3.4");
+        telemetry.addData("version: ", "4");
 
         telemetry.update();
 

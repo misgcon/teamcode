@@ -34,7 +34,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.PushbotAutoDriveByEncoder_Linear;
+
 
 /**
  * This is NOT an opmode.
@@ -109,7 +109,7 @@ public class HardwareConnection {
 
     }
 
-    public void setRIGHTDrivePower(double speed) {  //short cut to power the right DC_motors
+    public void setRIGHTMotorDrivePower(double speed) {  //short cut to power the right DC_motors
         motor_right.setPower(speed);
     }
 

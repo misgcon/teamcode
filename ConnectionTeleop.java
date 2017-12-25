@@ -71,9 +71,10 @@ public class ConnectionTeleop extends OpMode {
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
-        up = gamepad2.right_stick_y;
+        //up = gamepad2.right_stick_y; we dont need this yet
         //sides = -gamepad1.left_stick_x;
-
+/*
+we dont need this yet
         if (gamepad1.y) {
             if (!reverese_pressed) {
                 reverse = !reverse;
@@ -88,7 +89,7 @@ public class ConnectionTeleop extends OpMode {
             left = -left;
             right = -right;
         }
-
+*/
         robot.motor_left.setPower(-left / speedDecrease);
 
         robot.motor_right.setPower(-right / speedDecrease);
