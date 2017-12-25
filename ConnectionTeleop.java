@@ -94,53 +94,15 @@ we dont need this yet
             left = -left;
             right = -right;
         }
-<<<<<<< HEAD
+
 */
-        robot.motor_left.setPower(-left / speedDecrease);
 
-        robot.motor_right.setPower(-right / speedDecrease);
-=======
+        robot.motor_left_front.setPower(left / speedDecrease);
+        robot.motor_left_back.setPower(left / speedDecrease);
+        robot.motor_right_front.setPower(right / speedDecrease);
+        robot.motor_right_back.setPower(right / speedDecrease);
+        //robot.motor_elevator.setPower(up);
 
-        robot.motor_left_front.setPower(-left / speedDecrease);
-        robot.motor_left_back.setPower(-left / speedDecrease);
-        robot.motor_right_front.setPower(-right / speedDecrease);
-        robot.motor_right_back.setPower(-right / speedDecrease);
-        robot.motor_elevator.setPower(up);
-        //robot.motor_middle.setPower(sides);
->>>>>>> parent of e023a34... getting the code ready for new robot
-
-        // Use gamepad up and down buttons to open and close the grip
-        /*if (gamepad2.dpad_up && !gamepad2.dpad_down) {
-            robot.upper_grip.setPosition(0.0);//to be lucky this time
-            robot.lower_grip.setPosition(0.0);
-            //robot.closeGrip();
-        }
-
-        if (!gamepad2.dpad_up && gamepad2.dpad_down) {
-            robot.upper_grip.setPosition(1.0);
-            robot.lower_grip.setPosition(1.0);
-            //robot.openGrip();
-        }
-
-        if (gamepad1.left_bumper && !gamepad1.right_bumper){
-            robot.motor_middle.setPower(1.0);
-        }
-
-        if (!gamepad1.left_bumper && gamepad1.right_bumper){
-            robot.motor_middle.setPower(-1.0);
-        }
-        if (!gamepad1.right_bumper && !gamepad1.right_bumper) {
-            robot.motor_middle.setPower(0.0);
-        }
-
-        telemetry.addData("upper grip position ", robot.upper_grip.getPosition());
-        telemetry.addData("lower grip position ", robot.lower_grip.getPosition());
-        telemetry.addData("left ", left);
-        telemetry.addData("right ", right);
-        //telemetry.addData("sides ", sides / speedDecrease);
-        telemetry.addData("reverse ", reverse);
-        telemetry.update();
-*/
     }
 
 }

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.net.PortUnreachableException;
@@ -20,6 +21,7 @@ public abstract class autoMain extends LinearOpMode {
     ColorSensor colorSensor;
     static private double FORWORD_SPEED = 0.4;
     private ElapsedTime runtime = new ElapsedTime();
+    boolean isBallBlue;
     public enum Column {
         LEFT, CENTER, RIGHT
     }
@@ -30,79 +32,51 @@ public abstract class autoMain extends LinearOpMode {
 
         robot.init(hardwareMap);
 
-<<<<<<< HEAD
         telemetry.addData("version: ", "4");
 
         telemetry.update();
 
         waitForStart();
-
-
-        dropBall(isBlue, leftSide);
-
-=======
-        waitForStart();
-
         dropBall(isBlue);
->>>>>>> parent of 65036c2... final code before 1 comp
+        waitForStart();
+        dropBall(isBlue);
         Column column = readPhoto();
         moveToCryptoBox(isBlue, leftSide);
         putCube (column);
         goToSafeZone();
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of 65036c2... final code before 1 comp
     }
 
     // Balls task: Move the ball with the other color aside.
     private void dropBall(boolean isBlue) {
         colorSensor = hardwareMap.get(ColorSensor.class, "cSensor_ballArm");
-<<<<<<< HEAD
-        // TODO(): implement.
-=======
-        // TODO(): Avital.
-        robot.ball_hand.setPosition(1);
+        // TODO(): itay.s.
+        robot.ballHand_X.setPosition(0.3);
+        sleep(100);
+        robot.ballHand_X.setPosition(0.8);
         sleep(1000);
-        robot.ball_hand.setPosition(2);
-        /*for (int i = 0; i >= 100; i++){
-           int x = 1;
-           robot.ball_hand.setPosition(x);
-           x++;
-           sleep(100);
+        if (colorSensor.blue() >= 24) {
+            isBallBlue = true;
         }
-        */
-
-        sleep(1000);
-
-        runtime.reset();
-        boolean isBallColorDetected = false;
-        boolean isBallBlue = false;
-        while (opModeIsActive() && (runtime.seconds() < 2)) {
-            if (robot.colorSensor.blue() >= 27) {
+        else {
+            robot.ballHand_Y.setPosition(0.08);
+            sleep(100);
+            if (colorSensor.blue() >= 24) {
                 isBallBlue = true;
-                isBallColorDetected = true;
-                break;
             }
-            if (robot.colorSensor.red() >= 27) {
+            else {
                 isBallBlue = false;
-                isBallColorDetected = true;
-                break;
             }
-            idle();
         }
 
-        if (isBallColorDetected) {
-            if (isBlue == isBallBlue) {
-                driveStrait(-FORWORD_SPEED, 0.3);
-            } else {
-                driveStrait(FORWORD_SPEED, 0.3);
-            }
+        //=====================================
+        if (isBlue == isBallBlue){
+            robot.ballHand_Y.setPosition(0.7);
+            sleep(1000);
         }
-        robot.ball_hand.setPosition(0.0);
-        sleep(2000);
-        driveStrait(FORWORD_SPEED, 3);
->>>>>>> parent of 65036c2... final code before 1 comp
+        else {
+            robot.ballHand_Y.setPosition(-0.7);
+        }
     }
 
     // Read photo and return the column to put the cube in.
@@ -125,14 +99,6 @@ public abstract class autoMain extends LinearOpMode {
     private void goToSafeZone (){
         // TODO(): implement.
 
-
-
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-            idle();
-        }
-        robot.setALLMotorDrivePower(0.0);
     }
 
     void driveStrait(double speed, double seconds) {
@@ -145,7 +111,6 @@ public abstract class autoMain extends LinearOpMode {
         robot.setALLMotorDrivePower(0);
     }
 
-<<<<<<< HEAD
     void driveStraitLEFT (double speed, double seconds){
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.setLEFTMotorDrivePower(speed);
@@ -156,44 +121,45 @@ public abstract class autoMain extends LinearOpMode {
         robot.setLEFTMotorDrivePower(0);
     }
 
-    public void driveStraitToTargetWithEncoder (double speed, int newTarget){
+     void driveStraitEncoder (double speed, int newTarget){
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.resetEncoder();
-        int driveTarget = robot.motor_left.getCurrentPosition() + newTarget;
-        robot.motor_left.setTargetPosition(driveTarget);
+        int leftTargetBack = robot.motor_left_back.getCurrentPosition() + newTarget;
+        int leftTargetFront = robot.motor_left_front.getCurrentPosition() + newTarget;
+        int rightTargetBack = robot.motor_left_back.getCurrentPosition() + newTarget;
+        int rightTargetFront = robot.motor_left_back.getCurrentPosition() + newTarget;
+
+        robot.motor_left_back.setTargetPosition(leftTargetBack);
+        robot.motor_left_front.setTargetPosition(leftTargetFront);
+        robot.motor_right_back.setTargetPosition(rightTargetBack);
+        robot.motor_right_front.setTargetPosition(rightTargetFront);
         robot.setALLMotorDrivePower(speed);
-        while (opModeIsActive() && (robot.motor_left.isBusy())){
+        while (opModeIsActive() && (robot.motor_left_back.isBusy()) && (robot.motor_right_front.isBusy()) && (robot.motor_right_back.isBusy())
+                && (robot.motor_left_front.isBusy())){
         idle();
         }
         robot.setALLMotorDrivePower(0);
     }
     // just as a placeHolder, 1 degree of spin is 5 ticks, to turn left its positive degrees and to turn right its negative.
-    public void turnWithEncoder (int degree, double speed){
+     void turnWithEncoder (int degree, double speed){
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.resetEncoder();
-        int leftTarget = -5*degree;
-        int rightTarget = 5*degree;
-        robot.motor_left.setTargetPosition(leftTarget);
-        robot.motor_right.setTargetPosition(rightTarget);
+        int leftTargetBack = -5*degree;
+        int rightTargetBack = 5*degree;
+        int leftTargetFront = -5*degree;
+        int rightTargetFront = 5*degree;
+        robot.motor_left_back.setTargetPosition(leftTargetBack);
+        robot.motor_left_front.setTargetPosition(leftTargetFront);
+        robot.motor_right_front.setTargetPosition(rightTargetBack);
+        robot.motor_right_back.setTargetPosition(rightTargetFront);
         robot.setALLMotorDrivePower(speed);
-        while (opModeIsActive() && (robot.motor_left.isBusy()) && (robot.motor_right.isBusy())){
-
-    void driveStraitWithEncoder(double speed, int ticks) {
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.setALLMotorDrivePower(ticks > 0 ? speed : -speed);
-
-        int targetPosition = robot.motor_left_back.getCurrentPosition() + ticks;
-        while (opModeIsActive()) {
-            if (ticks > 0 && robot.motor_left_back.getCurrentPosition() >= targetPosition) {
-                break;
-            }
-            if (ticks < 0 && robot.motor_left_back.getCurrentPosition() <= targetPosition) {
-                break;
-            }
-
+        while (opModeIsActive() && (robot.motor_left_back.isBusy()) && (robot.motor_right_front.isBusy()) && (robot.motor_right_back.isBusy())
+                && (robot.motor_left_front.isBusy())){
+        idle();
         }
-        robot.setALLMotorDrivePower(0);
+        robot.setALLMotorDrivePower(0.0);
     }
+
 }
 
 
