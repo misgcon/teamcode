@@ -31,10 +31,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+<<<<<<< HEAD
 
 
+=======
+import com.qualcomm.robotcore.util.ElapsedTime;
+>>>>>>> parent of e023a34... getting the code ready for new robot
 
 /**
  * This is NOT an opmode.
@@ -54,8 +59,14 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 public class HardwareConnection {
     /* Public OpMode members. */
-    public DcMotor motor_left;
-    public DcMotor motor_right;
+    public DcMotor motor_left_front;
+    public DcMotor motor_left_back;
+    public DcMotor motor_right_front;
+    public DcMotor motor_right_back;
+    public DcMotor motor_elevator;
+    public DcMotor motor_middle;
+    public Servo upper_grip;
+    public Servo lower_grip;
     public Servo ball_hand;
     public ColorSensor colorSensor;
 
@@ -75,44 +86,71 @@ public class HardwareConnection {
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        motor_left = hwMap.get(DcMotor.class, "motor_left");
-        motor_right = hwMap.get(DcMotor.class, "motor_right");
+        motor_left_back = hwMap.get(DcMotor.class, "motor_left_back");
+        motor_left_front = hwMap.get(DcMotor.class, "motor_left_front");
+        motor_right_back = hwMap.get(DcMotor.class, "motor_right_back");
+        motor_right_front = hwMap.get(DcMotor.class, "motor_right_front");
+        motor_elevator = hwMap.get(DcMotor.class, "motor_grip_lifter");
+        motor_middle = hwMap.get(DcMotor.class, "motor_middle");
+        upper_grip = hwMap.get(Servo.class, "upper_grip");
+        lower_grip = hwMap.get(Servo.class, "lower_grip");
         ball_hand = hwMap.get(Servo.class, "ball_hand");
 
         // define and Initialize sensors
         colorSensor = hwMap.get(ColorSensor.class, "cSensor_ballArm");
 
-        motor_left.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
-        motor_right.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motor_left_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
+        motor_right_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motor_right_front.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motor_elevator.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motor_middle.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
 
         // Set all motors to zero power
 
         setALLMotorDrivePower(0);
+        motor_elevator.setPower(0);
+
+        setGripPosition(1.0);
 
         ball_hand.setPosition(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        motor_middle.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 
     public void setALLMotorDrivePower(double speed) {  //short cut to power all the DC_motors
 <<<<<<< HEAD
+<<<<<<< HEAD
         motor_left.setPower(speed);
         motor_right.setPower(speed);
 =======
+=======
+>>>>>>> parent of e023a34... getting the code ready for new robot
         motor_left_front.setPower(speed);
         motor_left_back.setPower(speed);
         motor_right_front.setPower(speed);
         motor_right_back.setPower(speed);
         motor_middle.setPower(speed);
+<<<<<<< HEAD
+=======
+    }
+    public void setDriveMotorsPowerNoMiddle (double speed){
+        motor_left_front.setPower(speed);
+        motor_left_back.setPower(speed);
+        motor_right_front.setPower(speed);
+        motor_right_back.setPower(speed);
+>>>>>>> parent of e023a34... getting the code ready for new robot
     }
 
     public void setLEFTMotorDrivePower(double speed) {  //short cut to power all the DC_motors
         motor_left_front.setPower(speed);
         motor_left_back.setPower(speed);
+<<<<<<< HEAD
 >>>>>>> parent of 65036c2... final code before 1 comp
 
     }
@@ -129,14 +167,53 @@ public class HardwareConnection {
     public void setMotorDriveMode(DcMotor.RunMode runMode) {
         motor_right.setMode(runMode);
         motor_left.setMode(runMode);
+=======
+
     }
 
-    public void resetEncoder () {
-        motor_right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor_left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public void setRIGHTDrivePower(double speed) {  //short cut to power all the DC_motors
+        motor_right_front.setPower(speed);
+        motor_right_back.setPower(speed);
     }
 
+    public void setGripPosition(double position) {
+        upper_grip.setPosition(position);
+        lower_grip.setPosition(position);
 
+>>>>>>> parent of e023a34... getting the code ready for new robot
+    }
 
+    public void setMotorDriveMode(DcMotor.RunMode runMode) {
+        motor_right_front.setMode(runMode);
+        motor_right_back.setMode(runMode);
+        motor_left_front.setMode(runMode);
+        motor_left_back.setMode(runMode);
+    }
+
+ /*
+    void closeGrip() {
+        for (double i=0.8; i > 0 ; i-= 0.2) {
+            upper_grip.setPosition(i);
+            lower_grip.setPosition(i);
+            sleep(200);
+        }
+    }
+
+    void openGrip() {
+        for (double i=0.2; i < 1 ; i+= 0.2) {
+            upper_grip.setPosition(i);
+            lower_grip.setPosition(i);
+            sleep(200);
+        }
+    }
+
+    void sleep(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+    */
 }
 
