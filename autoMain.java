@@ -121,6 +121,16 @@ public abstract class autoMain extends LinearOpMode {
         robot.setLEFTMotorDrivePower(0);
     }
 
+    void driveStraitRIGHT (double speed, double seconds){
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.setRIGHTDrivePower(speed);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < seconds)) {
+            idle();
+        }
+        robot.setRIGHTDrivePower(0);
+    }
+
      void driveStraitEncoder (double speed, int newTarget){
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.resetEncoder();
