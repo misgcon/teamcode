@@ -36,18 +36,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.internal.ui.GamepadUser;
-//import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
-
-@TeleOp(name = "driveCode", group = "Pushbot")
-
+@TeleOp(name = "driveCode", group = "Connection")
 public class ConnectionTeleop extends OpMode {
-
-
-    static final double INCREMENT = 0.01; //The increment of speed in the servo
-    double position = 0.0;
     /* Declare OpMode members. */
-    HardwareConnection robot = new HardwareConnection(); // use the class created to define a Pushbot's hardware
+    HardwareConnection robot = new HardwareConnection();
     private double speedDecrease = 2.0;
     private boolean reverse = false;
     private boolean reverese_pressed = false;
@@ -57,9 +50,6 @@ public class ConnectionTeleop extends OpMode {
      */
     @Override
     public void init() {
-        /* Initialize the hardware variables.
-         * The init() method of the hardware class does all the work here
-         */
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
@@ -70,16 +60,12 @@ public class ConnectionTeleop extends OpMode {
         double left;
         double right;
         double up;
-        // double sides;
-
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
         //up = gamepad2.right_stick_y; we dont need this yet
-        //sides = -gamepad1.left_stick_x;
-/*
-we dont need this yet
+
         if (gamepad1.y) {
             if (!reverese_pressed) {
                 reverse = !reverse;
@@ -89,13 +75,10 @@ we dont need this yet
             reverese_pressed = false;
         }
 
-
         if (reverse) {
             left = -left;
             right = -right;
         }
-
-*/
 
         robot.motor_left_front.setPower(left / speedDecrease);
         robot.motor_left_back.setPower(left / speedDecrease);

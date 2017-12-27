@@ -31,28 +31,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 /**
  * This is NOT an opmode.
- * <p>
- * This class can be used to define all the specific hardware for a single robot.
- * In this case that robot is a Pushbot.
- * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
- * <p>
- * This hardware class assumes the following device names have been configured on the robot:
- * Note:  All names are lower case and some have single spaces between words.
- * <p>
- * Motor channel:  Left  drive motor:        "left_drive"
- * Motor channel:  Right drive motor:        "right_drive"
- * Motor channel:  Manipulator drive motor:  "left_arm"
- * Servo channel:  Servo to open left claw:  "left_hand"
- * Servo channel:  Servo to open right claw: "right_hand"
+ * This class can be used to define all the specific hardware for the Connection robot.
  */
 public class HardwareConnection {
     /* Public OpMode members. */
@@ -63,10 +47,9 @@ public class HardwareConnection {
     //public DcMotor motor_elevator;
     //public DcMotor left_grip;
     //public DcMotor right_grip;
-    public Servo ballHand_X;
-    public Servo ballHand_Y;
+    public Servo ballHandLift;
+    public Servo ballHandTurn;
     public ColorSensor colorSensor;
-
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -75,23 +58,21 @@ public class HardwareConnection {
     public HardwareConnection() {
     }
 
-
-
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        motor_left_back = hwMap.get(DcMotor.class, "motor_left_back");
-        motor_left_front = hwMap.get(DcMotor.class, "motor_left_front");
-        motor_right_back = hwMap.get(DcMotor.class, "motor_right_back");
-        motor_right_front = hwMap.get(DcMotor.class, "motor_right_front");
+        motor_left_back = hwMap.get(DcMotor.class, "dlb");
+        motor_left_front = hwMap.get(DcMotor.class, "dlf");
+        motor_right_back = hwMap.get(DcMotor.class, "drb");
+        motor_right_front = hwMap.get(DcMotor.class, "drf");
         //motor_elevator = hwMap.get(DcMotor.class, "motor_grip_lifter");
         //left_grip = hwMap.get(DcMotor.class, "upper_grip");
         //right_grip = hwMap.get(DcMotor.class, "lower_grip");
-        ballHand_X = hwMap.get(Servo.class, "ball_hand_x");
-        ballHand_Y = hwMap.get(Servo.class, "ball_hand_y");
+        ballHandLift = hwMap.get(Servo.class, "bx");
+        ballHandTurn = hwMap.get(Servo.class, "by");
 
         // define and Initialize sensors
         colorSensor = hwMap.get(ColorSensor.class, "cSensor_ballArm");
@@ -102,38 +83,26 @@ public class HardwareConnection {
         motor_right_front.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         //motor_elevator.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
 
-
-        // Set all motors to zero power
-
-        setALLMotorDrivePower(0);
+        setAllMotorDrivePower(0);
         //motor_elevator.setPower(0);
-
         //setGripSpeed(0.0);
 
-        //ball_hand.setPosition(0);
-
-        // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
         setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-
-    public void setALLMotorDrivePower(double speed) {  //short cut to power all the DC_motors
+    public void setAllMotorDrivePower(double speed) {  //short cut to power all the DC_motors
         motor_left_back.setPower(speed);
         motor_right_front.setPower(speed);
         motor_left_front.setPower(speed);
         motor_right_back.setPower(speed);
     }
 
-
-    public void setLEFTMotorDrivePower(double speed) {  //short cut to power all the DC_motors
+    public void setLeftMotorDrivePower(double speed) {  //short cut to power all the DC_motors
         motor_left_front.setPower(speed);
         motor_left_back.setPower(speed);
-
     }
-
-    public void setRIGHTDrivePower(double speed) {  //short cut to power all the DC_motors
+    public void setRightDrivePower(double speed) {  //short cut to power all the DC_motors
         motor_right_front.setPower(speed);
         motor_right_back.setPower(speed);
     }

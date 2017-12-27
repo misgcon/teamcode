@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 /**
  * Created by itay on 20/11/2017.
  */
-@Autonomous(name="autoBlueLeft", group="Pushbot")
+@Autonomous(name="AutoBlueLeft", group="Connection")
 
-public class autoBlueLeft extends org.firstinspires.ftc.teamcode.autoMain {
+public class AutoBlueLeft extends AutoMain {
 
     @Override
     public void runOpMode() throws InterruptedException {

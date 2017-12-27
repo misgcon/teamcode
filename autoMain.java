@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.net.PortUnreachableException;
-
-//import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 /**
  * Created by itay on 15/11/2017.
@@ -17,72 +13,76 @@ import java.net.PortUnreachableException;
  * The common class for all the auto modes.
  * each auto mode should call function apolloRun.
  */
-public abstract class autoMain extends LinearOpMode {
+public abstract class AutoMain extends LinearOpMode {
     ColorSensor colorSensor;
     static private double FORWORD_SPEED = 0.4;
     private ElapsedTime runtime = new ElapsedTime();
-    boolean isBallBlue;
-    public enum Column {
-        LEFT, CENTER, RIGHT
-    }
 
     HardwareConnection robot = new HardwareConnection();
 
     void connectionRun(boolean isBlue, boolean leftSide){
-
         robot.init(hardwareMap);
 
         telemetry.addData("version: ", "4");
-
         telemetry.update();
 
         waitForStart();
-        dropBall(isBlue);
-        waitForStart();
-        dropBall(isBlue);
-        Column column = readPhoto();
-        moveToCryptoBox(isBlue, leftSide);
-        putCube (column);
-        goToSafeZone();
 
+        dropBall(isBlue);
+        RelicRecoveryVuMark column = readPhoto();
+        moveToCryptoBox(isBlue, leftSide);
+        putCube(column);
+        goToSafeZone();
     }
 
     // Balls task: Move the ball with the other color aside.
     private void dropBall(boolean isBlue) {
+        boolean isBallBlue = false;
         colorSensor = hardwareMap.get(ColorSensor.class, "cSensor_ballArm");
         // TODO(): itay.s.
-        robot.ballHand_X.setPosition(0.3);
+        robot.ballHandLift.setPosition(0.3);
         sleep(100);
-        robot.ballHand_X.setPosition(0.8);
+        robot.ballHandLift.setPosition(0.8);
         sleep(1000);
-        if (colorSensor.blue() >= 24) {
-            isBallBlue = true;
-        }
-        else {
-            robot.ballHand_Y.setPosition(0.08);
-            sleep(100);
+
+        boolean foundColor = false;
+        for (int i = 0; i < 3 ; i++) {
             if (colorSensor.blue() >= 24) {
                 isBallBlue = true;
-            }
-            else {
+                foundColor = true;
+                break;
+            } else if (colorSensor.red() >= 24) {
                 isBallBlue = false;
+                foundColor = true;
+                break;
             }
+
+            robot.ballHandTurn.setPosition(-0.08);
+            sleep(100);
         }
 
-        //=====================================
-        if (isBlue == isBallBlue){
-            robot.ballHand_Y.setPosition(0.7);
+        if (foundColor) {
+            if (isBlue == isBallBlue) {
+                robot.ballHandTurn.setPosition(-0.7);
+            } else {
+                robot.ballHandTurn.setPosition(0.7);
+            }
             sleep(1000);
         }
-        else {
-            robot.ballHand_Y.setPosition(-0.7);
-        }
+
+        robot.ballHandTurn.setPosition(0);
+        sleep(1000);
+
+        robot.ballHandLift.setPosition(0.3);
+        sleep(100);
+        robot.ballHandLift.setPosition(0);
+        sleep(1000);
     }
 
     // Read photo and return the column to put the cube in.
-    private Column readPhoto(){
+    private RelicRecoveryVuMark readPhoto(){
         // TODO(): implement.
-        return Column.RIGHT; // Place holder.
+        return RelicRecoveryVuMark.RIGHT; // Place holder.
     }
 
     // Move to crypto box
@@ -91,83 +91,59 @@ public abstract class autoMain extends LinearOpMode {
     }
 
     // Put the cube
-    private void putCube (Column column){
+    private void putCube (RelicRecoveryVuMark column){
         // TODO(): implement.
     }
 
     // Park the robot
     private void goToSafeZone (){
         // TODO(): implement.
-
     }
 
-    void driveStrait(double speed, double seconds) {
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.setALLMotorDrivePower(speed);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < seconds)) {
-            idle();
-        }
-        robot.setALLMotorDrivePower(0);
-    }
-
-    void driveStraitLEFT (double speed, double seconds){
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.setLEFTMotorDrivePower(speed);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < seconds)) {
-            idle();
-        }
-        robot.setLEFTMotorDrivePower(0);
-    }
-
-    void driveStraitRIGHT (double speed, double seconds){
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.setRIGHTDrivePower(speed);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < seconds)) {
-            idle();
-        }
-        robot.setRIGHTDrivePower(0);
-    }
-
-     void driveStraitEncoder (double speed, int newTarget){
+    void driveStraitWithEncoder(double speed, int ticks) {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.resetEncoder();
-        int leftTargetBack = robot.motor_left_back.getCurrentPosition() + newTarget;
-        int leftTargetFront = robot.motor_left_front.getCurrentPosition() + newTarget;
-        int rightTargetBack = robot.motor_left_back.getCurrentPosition() + newTarget;
-        int rightTargetFront = robot.motor_left_back.getCurrentPosition() + newTarget;
+        int leftTargetBack = robot.motor_left_back.getCurrentPosition() + ticks;
+        int leftTargetFront = robot.motor_left_front.getCurrentPosition() + ticks;
+        int rightTargetBack = robot.motor_left_back.getCurrentPosition() + ticks;
+        int rightTargetFront = robot.motor_left_back.getCurrentPosition() + ticks;
 
         robot.motor_left_back.setTargetPosition(leftTargetBack);
         robot.motor_left_front.setTargetPosition(leftTargetFront);
         robot.motor_right_back.setTargetPosition(rightTargetBack);
         robot.motor_right_front.setTargetPosition(rightTargetFront);
-        robot.setALLMotorDrivePower(speed);
-        while (opModeIsActive() && (robot.motor_left_back.isBusy()) && (robot.motor_right_front.isBusy()) && (robot.motor_right_back.isBusy())
-                && (robot.motor_left_front.isBusy())){
-        idle();
+        robot.setAllMotorDrivePower(speed);
+        while (opModeIsActive() &&
+                (robot.motor_left_back.isBusy()) &&
+                (robot.motor_right_front.isBusy()) &&
+                (robot.motor_right_back.isBusy()) &&
+                (robot.motor_left_front.isBusy())) {
+            idle();
         }
-        robot.setALLMotorDrivePower(0);
+        robot.setAllMotorDrivePower(0);
     }
+
     // just as a placeHolder, 1 degree of spin is 5 ticks, to turn left its positive degrees and to turn right its negative.
-     void turnWithEncoder (int degree, double speed){
+    void turnWithEncoder(int degree, double speed) {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.resetEncoder();
-        int leftTargetBack = -5*degree;
-        int rightTargetBack = 5*degree;
-        int leftTargetFront = -5*degree;
-        int rightTargetFront = 5*degree;
+        int leftTargetBack = -5 * degree;
+        int rightTargetBack = 5 * degree;
+        int leftTargetFront = -5 * degree;
+        int rightTargetFront = 5 * degree;
         robot.motor_left_back.setTargetPosition(leftTargetBack);
         robot.motor_left_front.setTargetPosition(leftTargetFront);
         robot.motor_right_front.setTargetPosition(rightTargetBack);
         robot.motor_right_back.setTargetPosition(rightTargetFront);
-        robot.setALLMotorDrivePower(speed);
-        while (opModeIsActive() && (robot.motor_left_back.isBusy()) && (robot.motor_right_front.isBusy()) && (robot.motor_right_back.isBusy())
-                && (robot.motor_left_front.isBusy())){
-        idle();
+        robot.setAllMotorDrivePower(speed);
+        while (opModeIsActive() &&
+                (robot.motor_left_back.isBusy()) &&
+                (robot.motor_right_front.isBusy()) &&
+                (robot.motor_right_back.isBusy()) &&
+                (robot.motor_left_front.isBusy())) {
+            idle();
         }
-        robot.setALLMotorDrivePower(0.0);
+        robot.setAllMotorDrivePower(0.0);
     }
 
 }

@@ -53,7 +53,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  */
 @TeleOp(name = "color_sensor_try", group = "Sensor")
 
-public class  colorSensor1 extends LinearOpMode {
+public class ColorSensor1 extends LinearOpMode {
 
   ColorSensor colorSensor;    // Hardware Device Object
 
