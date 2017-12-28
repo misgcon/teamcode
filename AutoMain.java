@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 
 /**
  * Created by itay on 15/11/2017.
@@ -29,9 +30,9 @@ public abstract class AutoMain extends LinearOpMode {
         waitForStart();
 
         dropBall(isBlue);
-        RelicRecoveryVuMark column = readPhoto();
+        //RelicRecoveryVuMark column = readPhoto();
         moveToCryptoBox(isBlue, leftSide);
-        putCube(column);
+        //putCube(column);
         goToSafeZone();
     }
 
@@ -80,11 +81,21 @@ public abstract class AutoMain extends LinearOpMode {
     }
 
     // Read photo and return the column to put the cube in.
-    private RelicRecoveryVuMark readPhoto(){
+    /*private RelicRecoveryVuMark readPhoto(){
         // TODO(): implement.
-        return RelicRecoveryVuMark.RIGHT; // Place holder.
+            relicTrackables.activate(); //error, fix it Avital
+            ElapsedTime runtime = new ElapsedTime();
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < 2.0)) {
+                RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate); //error, fix it Avital...
+                if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                    return vuMark;
+                }
+            }
+            return RelicRecoveryVuMark.UNKNOWN;
+return RelicRecoveryVuMark.RIGHT; // Place holder.
     }
-
+*/
     // Move to crypto box
     private void moveToCryptoBox(boolean isBlue, boolean leftSide){
         // TODO(): implement.
@@ -101,7 +112,7 @@ public abstract class AutoMain extends LinearOpMode {
     }
 
     void driveStraitWithEncoder(double speed, int ticks) {
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.resetEncoder();
         int leftTargetBack = robot.motor_left_back.getCurrentPosition() + ticks;
         int leftTargetFront = robot.motor_left_front.getCurrentPosition() + ticks;
@@ -125,7 +136,7 @@ public abstract class AutoMain extends LinearOpMode {
 
     // just as a placeHolder, 1 degree of spin is 5 ticks, to turn left its positive degrees and to turn right its negative.
     void turnWithEncoder(int degree, double speed) {
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.resetEncoder();
         int leftTargetBack = -5 * degree;
         int rightTargetBack = 5 * degree;
