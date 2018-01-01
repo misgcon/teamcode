@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -5,12 +6,17 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
  * Created by itay on 15/11/2017.
- *
+ * <p>
  * The common class for all the auto modes.
  * each auto mode should call function apolloRun.
  */
@@ -18,10 +24,12 @@ public abstract class AutoMain extends LinearOpMode {
     ColorSensor colorSensor;
     static private double FORWORD_SPEED = 0.4;
     private ElapsedTime runtime = new ElapsedTime();
-
+    VuforiaLocalizer vuforia;
+    VuforiaTrackable relicTemplate;
+    VuforiaTrackables relicTrackables;
     HardwareConnection robot = new HardwareConnection();
 
-    void connectionRun(boolean isBlue, boolean leftSide){
+    void connectionRun(boolean isBlue, boolean leftSide) {
         robot.init(hardwareMap);
 
         telemetry.addData("version: ", "4");
@@ -30,9 +38,9 @@ public abstract class AutoMain extends LinearOpMode {
         waitForStart();
 
         dropBall(isBlue);
-        //RelicRecoveryVuMark column = readPhoto();
+        RelicRecoveryVuMark column = readPhoto();
         moveToCryptoBox(isBlue, leftSide);
-        //putCube(column);
+        putCube(column);
         goToSafeZone();
     }
 
@@ -42,12 +50,12 @@ public abstract class AutoMain extends LinearOpMode {
         colorSensor = hardwareMap.get(ColorSensor.class, "cSensor_ballArm");
         // TODO(): itay.s.
         robot.ballHandLift.setPosition(0.3);
-        sleep(100);
-        robot.ballHandLift.setPosition(0.8);
+        sleep(1000);
+        robot.ballHandLift.setPosition(0.6);
         sleep(1000);
 
         boolean foundColor = false;
-        for (int i = 0; i < 3 ; i++) {
+        for (int i = 0; i < 3; i++) {
             if (colorSensor.blue() >= 24) {
                 isBallBlue = true;
                 foundColor = true;
@@ -81,38 +89,54 @@ public abstract class AutoMain extends LinearOpMode {
     }
 
     // Read photo and return the column to put the cube in.
-    /*private RelicRecoveryVuMark readPhoto(){
+    private RelicRecoveryVuMark readPhoto() {
         // TODO(): implement.
-            relicTrackables.activate(); //error, fix it Avital
-            ElapsedTime runtime = new ElapsedTime();
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 2.0)) {
-                RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate); //error, fix it Avital...
-                if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-                    return vuMark;
-                }
+
+        relicTrackables.activate();
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 2.0)) {
+            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                telemetry.addData("VuMark", "%s visible", vuMark);
+                return vuMark;
             }
-            return RelicRecoveryVuMark.UNKNOWN;
-return RelicRecoveryVuMark.RIGHT; // Place holder.
+        }
+        return RelicRecoveryVuMark.UNKNOWN;
     }
-*/
+
     // Move to crypto box
-    private void moveToCryptoBox(boolean isBlue, boolean leftSide){
+    private void moveToCryptoBox(boolean isBlue, boolean leftSide) {
         // TODO(): implement.
     }
 
     // Put the cube
-    private void putCube (RelicRecoveryVuMark column){
+    private void putCube(RelicRecoveryVuMark column) {
         // TODO(): implement.
+    }
+    //init vuforia
+    public void initVuforia() {
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+
+        parameters.vuforiaLicenseKey = "Ac7hmPf/////AAAAmY1DFiTs+kenqbX9NbXujRAvP71bvNIwaSEsWB5HTXOb74TMHFnW9TqU/HACnA2BirmMCxCdqFJ0+Wby1+PpOLEUIjc7aSMOFF0/BUClZ5OEVeGvvfEBH4G2EkIt5tfGYhX9S4V+rnlTV6uBjSdRF8hh2XSK2oXkWWvnOGaoOJU+ku+QVwMQS/Gk4JyX0bLbgAIqGjJ3+y2Vwlqzui41Kzbc9zJgjugdvIFrOUE74mxhsEOTO7qwf6V+jeUURInrek5ycrp2weRWjJoZON0p3m1XQ/G0KwL3gTz+KMGQeoVNA76IcwRjXQBPBNKACJyCCQ29JryL84Qvf3FOll2nD5VNGL7j29wYXS01CmuaOFk0\n";
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+
+        relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        relicTemplate = relicTrackables.get(0);
+        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
+
     }
 
     // Park the robot
-    private void goToSafeZone (){
+    private void goToSafeZone() {
         // TODO(): implement.
     }
 
     void driveStraitWithEncoder(double speed, int ticks) {
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.resetEncoder();
         int leftTargetBack = robot.motor_left_back.getCurrentPosition() + ticks;
         int leftTargetFront = robot.motor_left_front.getCurrentPosition() + ticks;
@@ -136,7 +160,7 @@ return RelicRecoveryVuMark.RIGHT; // Place holder.
 
     // just as a placeHolder, 1 degree of spin is 5 ticks, to turn left its positive degrees and to turn right its negative.
     void turnWithEncoder(int degree, double speed) {
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.resetEncoder();
         int leftTargetBack = -5 * degree;
         int rightTargetBack = 5 * degree;
@@ -158,6 +182,3 @@ return RelicRecoveryVuMark.RIGHT; // Place holder.
     }
 
 }
-
-
-

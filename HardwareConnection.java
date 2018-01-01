@@ -75,7 +75,7 @@ public class HardwareConnection {
         ballHandTurn = hwMap.get(Servo.class, "by");
 
         // define and Initialize sensors
-        colorSensor = hwMap.get(ColorSensor.class, "cSensor_ballArm");
+        colorSensor = hwMap.get(ColorSensor.class, "bcs");
 
         motor_left_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)

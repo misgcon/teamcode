@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.internal.ui.GamepadUser;
 
-@TeleOp(name = "driveCode", group = "Connection")
+@TeleOp(name = "encoderCheck", group = "Connection")
 public class encoderCheck extends OpMode {
     /* Declare OpMode members. */
     HardwareConnection robot = new HardwareConnection();
