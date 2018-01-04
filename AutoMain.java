@@ -31,7 +31,7 @@ public abstract class AutoMain extends LinearOpMode {
 
     void connectionRun(boolean isBlue, boolean leftSide) {
         robot.init(hardwareMap);
-
+        initVuforia();
         telemetry.addData("version: ", "4");
         telemetry.update();
 
