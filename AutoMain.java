@@ -47,7 +47,6 @@ public abstract class AutoMain extends LinearOpMode {
     // Balls task: Move the ball with the other color aside.
     private void dropBall(boolean isBlue) {
         boolean isBallBlue = false;
-        colorSensor = hardwareMap.get(ColorSensor.class, "cSensor_ballArm");
         // TODO(): itay.s.
         robot.ballHandLift.setPosition(0.3);
         sleep(1000);
@@ -56,11 +55,11 @@ public abstract class AutoMain extends LinearOpMode {
 
         boolean foundColor = false;
         for (int i = 0; i < 3; i++) {
-            if (colorSensor.blue() >= 24) {
+            if (colorSensor.blue() >= 100) {
                 isBallBlue = true;
                 foundColor = true;
                 break;
-            } else if (colorSensor.red() >= 24) {
+            } else if (colorSensor.red() >= 100) {
                 isBallBlue = false;
                 foundColor = true;
                 break;
