@@ -107,6 +107,7 @@ public abstract class AutoMain extends LinearOpMode {
     // Move to crypto box
     private void moveToCryptoBox(boolean isBlue, boolean leftSide) {
         // TODO(): implement.
+
     }
 
     // Put the cube

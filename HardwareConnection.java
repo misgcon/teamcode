@@ -44,7 +44,7 @@ public class HardwareConnection {
     public DcMotor motor_left_back;
     public DcMotor motor_right_front;
     public DcMotor motor_right_back;
-    //public DcMotor motor_elevator;
+    public DcMotor motor_elevator;
     //public DcMotor left_grip;
     //public DcMotor right_grip;
     public Servo ballHandLift;
@@ -68,7 +68,7 @@ public class HardwareConnection {
         motor_left_front = hwMap.get(DcMotor.class, "dlf");
         motor_right_back = hwMap.get(DcMotor.class, "drb");
         motor_right_front = hwMap.get(DcMotor.class, "drf");
-        //motor_elevator = hwMap.get(DcMotor.class, "motor_grip_lifter");
+        //motor_elevator = hwMap.get(DcMotor.class, "lift");
         //left_grip = hwMap.get(DcMotor.class, "upper_grip");
         //right_grip = hwMap.get(DcMotor.class, "lower_grip");
         ballHandLift = hwMap.get(Servo.class, "bx");

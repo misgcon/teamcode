@@ -59,12 +59,12 @@ public class ConnectionTeleop extends OpMode {
     public void loop() {
         double left;
         double right;
-        double up;
+       // double up;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
-        //up = gamepad2.right_stick_y; we dont need this yet
+        //up = gamepad2.left_stick_y; //we don't need this yet
 
         if (gamepad1.y) {
             if (!reverese_pressed) {
