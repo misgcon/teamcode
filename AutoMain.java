@@ -88,7 +88,7 @@ public abstract class AutoMain extends LinearOpMode {
     }
 
     // Read photo and return the column to put the cube in.
-    private RelicRecoveryVuMark readPhoto() {
+    public RelicRecoveryVuMark readPhoto() {
         // TODO(): implement.
 
         relicTrackables.activate();
@@ -113,6 +113,12 @@ public abstract class AutoMain extends LinearOpMode {
     // Put the cube
     private void putCube(RelicRecoveryVuMark column) {
         // TODO(): implement.
+
+        if (column == RelicRecoveryVuMark.CENTER){
+
+
+
+        }
     }
     //init vuforia
     public void initVuforia() {
@@ -121,7 +127,7 @@ public abstract class AutoMain extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = "Ac7hmPf/////AAAAmY1DFiTs+kenqbX9NbXujRAvP71bvNIwaSEsWB5HTXOb74TMHFnW9TqU/HACnA2BirmMCxCdqFJ0+Wby1+PpOLEUIjc7aSMOFF0/BUClZ5OEVeGvvfEBH4G2EkIt5tfGYhX9S4V+rnlTV6uBjSdRF8hh2XSK2oXkWWvnOGaoOJU+ku+QVwMQS/Gk4JyX0bLbgAIqGjJ3+y2Vwlqzui41Kzbc9zJgjugdvIFrOUE74mxhsEOTO7qwf6V+jeUURInrek5ycrp2weRWjJoZON0p3m1XQ/G0KwL3gTz+KMGQeoVNA76IcwRjXQBPBNKACJyCCQ29JryL84Qvf3FOll2nD5VNGL7j29wYXS01CmuaOFk0\n";
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
         relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");

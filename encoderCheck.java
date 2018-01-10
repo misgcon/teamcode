@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -42,10 +43,12 @@ public class encoderCheck extends OpMode {
     /* Declare OpMode members. */
     HardwareConnection robot = new HardwareConnection();
 
+
     @Override
     public void init() {
         robot.init(hardwareMap);
 
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Connection", "Starting");
     }

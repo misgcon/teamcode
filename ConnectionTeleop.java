@@ -80,10 +80,8 @@ public class ConnectionTeleop extends OpMode {
             right = -right;
         }
 
-        robot.motor_left_front.setPower(left / speedDecrease);
-        robot.motor_left_back.setPower(left / speedDecrease);
-        robot.motor_right_front.setPower(right / speedDecrease);
-        robot.motor_right_back.setPower(right / speedDecrease);
+        robot.setLeftMotorDrivePower(left/speedDecrease);
+        robot.setRightDrivePower(right/speedDecrease);
         //robot.motor_elevator.setPower(up);
 
     }

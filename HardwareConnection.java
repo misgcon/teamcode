@@ -45,11 +45,10 @@ public class HardwareConnection {
     public DcMotor motor_right_front;
     public DcMotor motor_right_back;
     public DcMotor motor_elevator;
-    //public DcMotor left_grip;
-    //public DcMotor right_grip;
     public Servo ballHandLift;
     public Servo ballHandTurn;
     public ColorSensor colorSensor;
+    public DcMotor cubePickUp;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -69,6 +68,7 @@ public class HardwareConnection {
         motor_right_back = hwMap.get(DcMotor.class, "drb");
         motor_right_front = hwMap.get(DcMotor.class, "drf");
         //motor_elevator = hwMap.get(DcMotor.class, "lift");
+        //cubePickUp = hwMap.get(DcMotor.class, "cubeArm");
         //left_grip = hwMap.get(DcMotor.class, "upper_grip");
         //right_grip = hwMap.get(DcMotor.class, "lower_grip");
         ballHandLift = hwMap.get(Servo.class, "bx");
@@ -89,6 +89,7 @@ public class HardwareConnection {
 
         setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //cubePickUp.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setAllMotorDrivePower(double speed) {  //short cut to power all the DC_motors
@@ -107,12 +108,6 @@ public class HardwareConnection {
         motor_right_back.setPower(speed);
     }
 
-    /*public void setGripSpeed(double speed) {
-        left_grip.setPower(speed);
-        right_grip.setPower(speed);
-
-    }
-    */
 
     public void setMotorDriveMode(DcMotor.RunMode runMode) {
         motor_right_front.setMode(runMode);
