@@ -89,8 +89,6 @@ public abstract class AutoMain extends LinearOpMode {
 
     // Read photo and return the column to put the cube in.
     public RelicRecoveryVuMark readPhoto() {
-        // TODO(): implement.
-
         relicTrackables.activate();
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
