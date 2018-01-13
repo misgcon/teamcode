@@ -48,8 +48,8 @@ public class HardwareConnection {
     public Servo ballHandLift;
     public Servo ballHandTurn;
     public ColorSensor colorSensor;
-    public DcMotor cubePickUp;
-
+    public DcMotor cubePickUp_left;
+    public DcMotor cubePickUp_right;
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
@@ -67,8 +67,9 @@ public class HardwareConnection {
         motor_left_front = hwMap.get(DcMotor.class, "dlf");
         motor_right_back = hwMap.get(DcMotor.class, "drb");
         motor_right_front = hwMap.get(DcMotor.class, "drf");
-        //motor_elevator = hwMap.get(DcMotor.class, "lift");
-        //cubePickUp = hwMap.get(DcMotor.class, "cubeArm");
+        motor_elevator = hwMap.get(DcMotor.class, "lift");
+        cubePickUp_left = hwMap.get(DcMotor.class, "cubeArmL");
+        cubePickUp_right = hwMap.get(DcMotor.class, "cubeArmR");
         //left_grip = hwMap.get(DcMotor.class, "upper_grip");
         //right_grip = hwMap.get(DcMotor.class, "lower_grip");
         ballHandLift = hwMap.get(Servo.class, "bx");
@@ -81,15 +82,16 @@ public class HardwareConnection {
         motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
         motor_right_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         motor_right_front.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        //motor_elevator.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motor_elevator.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
 
         setAllMotorDrivePower(0);
-        //motor_elevator.setPower(0);
+        motor_elevator.setPower(0);
         //setGripSpeed(0.0);
 
         setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //cubePickUp.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        cubePickUp_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        cubePickUp_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setAllMotorDrivePower(double speed) {  //short cut to power all the DC_motors

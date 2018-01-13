@@ -23,7 +23,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 public abstract class AutoMain extends LinearOpMode {
     ColorSensor colorSensor;
     static private double FORWORD_SPEED = 0.4;
-    private ElapsedTime runtime = new ElapsedTime();
     VuforiaLocalizer vuforia;
     VuforiaTrackable relicTemplate;
     VuforiaTrackables relicTrackables;
@@ -32,7 +31,7 @@ public abstract class AutoMain extends LinearOpMode {
     void connectionRun(boolean isBlue, boolean leftSide) {
         robot.init(hardwareMap);
         initVuforia();
-        telemetry.addData("version: ", "4");
+        telemetry.addData("version: ", "5");
         telemetry.update();
 
         waitForStart();
