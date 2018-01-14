@@ -64,14 +64,20 @@ public class ConnectionTeleop extends OpMode  {
         double right;
         double up;
         boolean spin = false;
+<<<<<<< HEAD
         boolean spin_pressed = false;
+=======
+>>>>>>> 284441ce914830be49aea63791f522d1ca23e10d
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
         up = gamepad2.left_stick_y; //we don't need this yet
+<<<<<<< HEAD
 
         //reverse toggle
+=======
+>>>>>>> 284441ce914830be49aea63791f522d1ca23e10d
         if (gamepad1.y) {
             if (!reverese_pressed) {
                 reverse = !reverse;
@@ -89,6 +95,7 @@ public class ConnectionTeleop extends OpMode  {
         //drive control
         robot.setLeftMotorDrivePower(left/speedDecrease);
         robot.setRightDrivePower(right/speedDecrease);
+<<<<<<< HEAD
 
         //elevator control
         robot.motor_elevator.setPower(up);
@@ -104,6 +111,13 @@ public class ConnectionTeleop extends OpMode  {
             spin_pressed = false;
         }
 
+=======
+        robot.motor_elevator.setPower(up);
+        if (gamepad2.right_bumper){
+            while(gamepad2.right_bumper){}
+            spin = !(spin);
+        }
+>>>>>>> 284441ce914830be49aea63791f522d1ca23e10d
         if (spin){
             robot.cubePickUp_right.setPower(-speed_of_cubeSpin);
             robot.cubePickUp_left.setPower(speed_of_cubeSpin);
