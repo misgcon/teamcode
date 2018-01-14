@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+//import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -21,9 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * each auto mode should call function apolloRun.
  */
 public abstract class AutoMain extends LinearOpMode {
-    ColorSensor colorSensor;
     static private double FORWORD_SPEED = 0.4;
-    private ElapsedTime runtime = new ElapsedTime();
     VuforiaLocalizer vuforia;
     VuforiaTrackable relicTemplate;
     VuforiaTrackables relicTrackables;
@@ -32,14 +31,14 @@ public abstract class AutoMain extends LinearOpMode {
     void connectionRun(boolean isBlue, boolean leftSide) {
         robot.init(hardwareMap);
         initVuforia();
-        telemetry.addData("version: ", "4");
+        telemetry.addData("version: ", "5");
         telemetry.update();
 
         waitForStart();
 
         dropBall(isBlue);
         RelicRecoveryVuMark column = readPhoto();
-        moveToCryptoBox(isBlue, leftSide);
+        moveToCryptoBox(isBlue, leftSide, column);
         putCube(column);
         goToSafeZone();
     }
@@ -55,11 +54,11 @@ public abstract class AutoMain extends LinearOpMode {
 
         boolean foundColor = false;
         for (int i = 0; i < 3; i++) {
-            if (colorSensor.blue() >= 100) {
+            if (robot.colorSensor.blue() >= 89) {
                 isBallBlue = true;
                 foundColor = true;
                 break;
-            } else if (colorSensor.red() >= 100) {
+            } else if (robot.colorSensor.red() >= 97) {
                 isBallBlue = false;
                 foundColor = true;
                 break;
@@ -89,8 +88,6 @@ public abstract class AutoMain extends LinearOpMode {
 
     // Read photo and return the column to put the cube in.
     public RelicRecoveryVuMark readPhoto() {
-        // TODO(): implement.
-
         relicTrackables.activate();
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
@@ -105,8 +102,15 @@ public abstract class AutoMain extends LinearOpMode {
     }
 
     // Move to crypto box
-    private void moveToCryptoBox(boolean isBlue, boolean leftSide) {
+    private void moveToCryptoBox(boolean isBlue, boolean leftSide, RelicRecoveryVuMark column) {
         // TODO(): implement.
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        if (column == RelicRecoveryVuMark.CENTER){
+
+            driveStraitWithEncoder(0.4 , 100);//not true value
+            turnWithEncoder(90, 0.4);
+            driveStraitWithEncoder(0.4, 20);
+        }
 
     }
 
@@ -114,12 +118,10 @@ public abstract class AutoMain extends LinearOpMode {
     private void putCube(RelicRecoveryVuMark column) {
         // TODO(): implement.
 
-        if (column == RelicRecoveryVuMark.CENTER){
-
 
 
         }
-    }
+
     //init vuforia
     public void initVuforia() {
 

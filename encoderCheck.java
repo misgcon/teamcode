@@ -49,6 +49,7 @@ public class encoderCheck extends OpMode {
         robot.init(hardwareMap);
 
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motor_elevator_twist.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Connection", "Starting");
     }
@@ -56,22 +57,26 @@ public class encoderCheck extends OpMode {
     public void loop() {
         double left;
         double right;
-
+        double up;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
+        up = gamepad1.right_stick_x;
 
-        robot.motor_left_front.setPower(left / 2);
-        robot.motor_left_back.setPower(left / 2);
-        robot.motor_right_front.setPower(right / 2);
-        robot.motor_right_back.setPower(right / 2);
+
+        robot.setRightDrivePower(right/2);
+        robot.setLeftMotorDrivePower(left/2);
+
+        robot.motor_elevator_twist.setPower(up/2);
 
 
         telemetry.addData("left motor front", robot.motor_left_front.getCurrentPosition());
         telemetry.addData("left motor back", robot.motor_left_back.getCurrentPosition());
         telemetry.addData("right motor front", robot.motor_right_front.getCurrentPosition());
         telemetry.addData("right motor back", robot.motor_right_back.getCurrentPosition());
+        telemetry.addData("elevator", robot.motor_elevator_twist.getCurrentPosition());
+
     }
 
 }

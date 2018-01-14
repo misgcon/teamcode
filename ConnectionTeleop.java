@@ -28,6 +28,8 @@
  */
 
 package org.firstinspires.ftc.teamcode;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -38,13 +40,14 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.internal.ui.GamepadUser;
 
 @TeleOp(name = "driveCode", group = "Connection")
-public class ConnectionTeleop extends OpMode {
+public class ConnectionTeleop extends OpMode  {
     /* Declare OpMode members. */
+    private ElapsedTime runtime = new ElapsedTime();
     HardwareConnection robot = new HardwareConnection();
     private double speedDecrease = 2.0;
     private boolean reverse = false;
     private boolean reverese_pressed = false;
-
+    private double speed_of_cubeSpin = 0.5; //Todo(): find a value that works
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -59,13 +62,16 @@ public class ConnectionTeleop extends OpMode {
     public void loop() {
         double left;
         double right;
-       // double up;
+        double up;
+        boolean spin = false;
+        boolean spin_pressed = false;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
-        //up = gamepad2.left_stick_y; //we don't need this yet
+        up = gamepad2.left_stick_y; //we don't need this yet
 
+        //reverse toggle
         if (gamepad1.y) {
             if (!reverese_pressed) {
                 reverse = !reverse;
@@ -80,9 +86,28 @@ public class ConnectionTeleop extends OpMode {
             right = -right;
         }
 
+        //drive control
         robot.setLeftMotorDrivePower(left/speedDecrease);
         robot.setRightDrivePower(right/speedDecrease);
-        //robot.motor_elevator.setPower(up);
+
+        //elevator control
+        robot.motor_elevator.setPower(up);
+
+        //spin toggle
+        if (gamepad2.right_bumper){
+            if (!spin_pressed){
+                spin = !spin;
+                spin_pressed = true;
+            }
+        }
+        else {
+            spin_pressed = false;
+        }
+
+        if (spin){
+            robot.cubePickUp_right.setPower(-speed_of_cubeSpin);
+            robot.cubePickUp_left.setPower(speed_of_cubeSpin);
+        }
 
     }
 
