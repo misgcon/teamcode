@@ -105,13 +105,78 @@ public abstract class AutoMain extends LinearOpMode {
     private void moveToCryptoBox(boolean isBlue, boolean leftSide, RelicRecoveryVuMark column) {
         // TODO(): implement.
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        if (column == RelicRecoveryVuMark.CENTER){
+        if (isBlue) {
+            if (!leftSide) {
 
-            driveStraitWithEncoder(0.4 , 100);//not true value
-            turnWithEncoder(90, 0.4);
-            driveStraitWithEncoder(0.4, 20);
-        }
+                if (column == RelicRecoveryVuMark.CENTER) {
 
+                    driveStraitWithEncoder(0.4, 100);//not true value
+                    turnWithEncoder(90, 0.4);
+                    driveStraitWithEncoder(0.4, 20);
+                }
+                if (column == RelicRecoveryVuMark.RIGHT) {
+
+                    driveStraitWithEncoder(0.4, 120);//not true value
+                    turnWithEncoder(90, 0.4);
+                    driveStraitWithEncoder(0.4, 20);
+                }
+                if (column == RelicRecoveryVuMark.LEFT) {
+
+                    driveStraitWithEncoder(0.4, 130);//not true value
+                    turnWithEncoder(90, 0.4);
+                    driveStraitWithEncoder(0.4, 20);
+                }
+
+            } else {
+                if (column == RelicRecoveryVuMark.CENTER) {
+                    turnWithEncoder(15, 0.4);
+                    driveStraitWithEncoder(0.4, 70);//not true value
+                }
+                if (column == RelicRecoveryVuMark.RIGHT) {
+                    turnWithEncoder(18, 0.4);
+                    driveStraitWithEncoder(0.4, 75);//not true value
+                }
+                if (column == RelicRecoveryVuMark.LEFT) {
+                    turnWithEncoder(20, 0.4);
+                    driveStraitWithEncoder(0.4, 80);//not true value
+                }
+            }
+        } else //if not blue aka;<red> {
+            if (!leftSide) {
+
+                if (column == RelicRecoveryVuMark.CENTER) {
+
+                    driveStraitWithEncoder(0.4, 100);//not true value
+                    turnWithEncoder(-90, 0.4);
+                    driveStraitWithEncoder(0.4, 20);
+                }
+                if (column == RelicRecoveryVuMark.RIGHT) {
+
+                    driveStraitWithEncoder(0.4, 120);//not true value
+                    turnWithEncoder(-90, 0.4);
+                    driveStraitWithEncoder(0.4, 20);
+                }
+                if (column == RelicRecoveryVuMark.LEFT) {
+
+                    driveStraitWithEncoder(0.4, 130);//not true value
+                    turnWithEncoder(-90, 0.4);
+                    driveStraitWithEncoder(0.4, 20);
+                }
+
+            } else {
+                if (column == RelicRecoveryVuMark.CENTER) {
+                    turnWithEncoder(-15, 0.4);
+                    driveStraitWithEncoder(0.4, 70);//not true value
+                }
+                if (column == RelicRecoveryVuMark.RIGHT) {
+                    turnWithEncoder(-18, 0.4);
+                    driveStraitWithEncoder(0.4, 75);//not true value
+                }
+                if (column == RelicRecoveryVuMark.LEFT) {
+                    turnWithEncoder(-20, 0.4);
+                    driveStraitWithEncoder(0.4, 80);//not true value
+                }
+            }
     }
 
     // Put the cube
@@ -119,8 +184,7 @@ public abstract class AutoMain extends LinearOpMode {
         // TODO(): implement.
 
 
-
-        }
+    }
 
     //init vuforia
     public void initVuforia() {

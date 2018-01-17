@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -65,35 +66,41 @@ public class HardwareConnection {
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        motor_left_back = hwMap.get(DcMotor.class, "dlb");
-        motor_left_front = hwMap.get(DcMotor.class, "dlf");
-        motor_right_back = hwMap.get(DcMotor.class, "drb");
-        motor_right_front = hwMap.get(DcMotor.class, "drf");
-        motor_elevator = hwMap.get(DcMotor.class, "lift");
+        //motor_left_back = hwMap.get(DcMotor.class, "dlb");
+        //motor_left_front = hwMap.get(DcMotor.class, "dlf");
+        //motor_right_back = hwMap.get(DcMotor.class, "drb");
+        //motor_right_front = hwMap.get(DcMotor.class, "drf");
+        //motor_elevator = hwMap.get(DcMotor.class, "lift");
+        //motor_elevator_twist = hwMap.get(DcMotor.class, "twister");
         cubePickUp_left = hwMap.get(DcMotor.class, "cubeArmL");
         cubePickUp_right = hwMap.get(DcMotor.class, "cubeArmR");
-        //left_grip = hwMap.get(DcMotor.class, "upper_grip");
-        //right_grip = hwMap.get(DcMotor.class, "lower_grip");
-        ballHandLift = hwMap.get(Servo.class, "bx");
-        ballHandTurn = hwMap.get(Servo.class, "by");
+        //ballHandLift = hwMap.get(Servo.class, "bx");
+        //7ballHandTurn = hwMap.get(Servo.class, "by");
 
         // define and Initialize sensors
-        colorSensor = hwMap.get(ColorSensor.class, "bcs");
+        //colorSensor = hwMap.get(ColorSensor.class, "bcs");
 
-        motor_left_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
-        motor_right_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        motor_right_front.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        motor_elevator.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        //motor_left_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        //motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
+        //motor_right_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        //motor_right_front.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        //motor_elevator.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        cubePickUp_left.setDirection(DcMotorSimple.Direction.FORWARD);
+        cubePickUp_right.setDirection(DcMotorSimple.Direction.FORWARD);
+        //motor_elevator_twist.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        setAllMotorDrivePower(0);
-        motor_elevator.setPower(0);
-        //setGripSpeed(0.0);
 
-        setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //setAllMotorDrivePower(0);
+        //motor_elevator.setPower(0);
+        cubePickUp_right.setPower(0);
+        cubePickUp_left.setPower(0);
+        //motor_elevator_twist.setPower(0);
+
+        //setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         cubePickUp_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         cubePickUp_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //motor_elevator_twist.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setAllMotorDrivePower(double speed) {  //short cut to power all the DC_motors

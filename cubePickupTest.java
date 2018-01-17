@@ -28,26 +28,19 @@
  */
 
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.internal.ui.GamepadUser;
-
-@TeleOp(name = "driveCode", group = "Connection")
-public class ConnectionTeleop extends OpMode  {
+@TeleOp(name = "cubePickup", group = "Connection")
+public class cubePickupTest extends OpMode  {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     HardwareConnection robot = new HardwareConnection();
     private double speedDecrease = 2.0;
-    private boolean reverse = false;
-    private boolean reverese_pressed = false;
-    private double speed_of_cubeSpin = 0.5; //Todo(): find a value that works
+    private double speed_of_cubeSpin = 0.5;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -60,59 +53,20 @@ public class ConnectionTeleop extends OpMode  {
     }
 
     public void loop() {
-        double left;
-        double right;
-        double up;
-        double twist;
         boolean spin = false;
         boolean spin_pressed = false;
+        double left;
+        double right;
 
-
+        left = gamepad2.left_stick_y;
+        right = gamepad2.right_stick_y;
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = gamepad1.left_stick_y;
-        right = gamepad1.right_stick_y;
-        up = gamepad2.left_stick_y;
-        twist = gamepad2.right_stick_y;
 
         //reverse toggle
-        if (gamepad1.y) {
-            if (!reverese_pressed) {
-                reverse = !reverse;
-                reverese_pressed = true;
-            }
-        } else {
-            reverese_pressed = false;
-        }
 
-        if (reverse) {
-            left = -left;
-            right = -right;
-        }
+        robot.cubePickUp_left.setPower(-left);
+        robot.cubePickUp_right.setPower(right);
 
-        //drive control
-        robot.setLeftMotorDrivePower(left/speedDecrease);
-        robot.setRightDrivePower(right/speedDecrease);
-
-        //elevator control
-        robot.motor_elevator.setPower(up);
-
-        //spin toggle
-        if (gamepad2.right_bumper){
-            if (!spin_pressed){
-                spin = !spin;
-                spin_pressed = true;
-            }
-        }
-        else {
-            spin_pressed = false;
-        }
-
-        if (spin){
-            robot.cubePickUp_right.setPower(-speed_of_cubeSpin);
-            robot.cubePickUp_left.setPower(speed_of_cubeSpin);
-        }
-
-        robot.motor_elevator_twist.setPower(twist);
     }
 
 }
