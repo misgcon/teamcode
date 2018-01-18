@@ -205,6 +205,7 @@ public abstract class AutoMain extends LinearOpMode {
     // Park the robot
     private void goToSafeZone() {
         // TODO(): implement.
+        twistElevator(90, 0.4);
     }
 
     void driveStraitWithEncoder(double speed, int ticks) {
@@ -236,21 +237,27 @@ public abstract class AutoMain extends LinearOpMode {
         robot.resetEncoder();
         int leftTargetBack = -5 * degree;
         int rightTargetBack = 5 * degree;
-        int leftTargetFront = -5 * degree;
-        int rightTargetFront = 5 * degree;
         robot.motor_left_back.setTargetPosition(leftTargetBack);
-        robot.motor_left_front.setTargetPosition(leftTargetFront);
         robot.motor_right_front.setTargetPosition(rightTargetBack);
-        robot.motor_right_back.setTargetPosition(rightTargetFront);
-        robot.setAllMotorDrivePower(speed);
+        robot.motor_right_front.setPower(speed);
+        robot.motor_left_front.setPower(speed);
         while (opModeIsActive() &&
-                (robot.motor_left_back.isBusy()) &&
                 (robot.motor_right_front.isBusy()) &&
-                (robot.motor_right_back.isBusy()) &&
                 (robot.motor_left_front.isBusy())) {
             idle();
         }
         robot.setAllMotorDrivePower(0.0);
     }
 
+    void twistElevator (int degree, double speed){
+        robot.motor_elevator_twist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motor_elevator_twist.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        int targetTwist = 5 * degree;
+        robot.motor_elevator_twist.setTargetPosition(targetTwist);
+        robot.motor_elevator_twist.setPower(speed);
+        while (opModeIsActive() && (robot.motor_elevator_twist.isBusy()){
+            idle();
+        }
+        robot.motor_elevator_twist.setPower(0);
+    }
 }
