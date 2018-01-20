@@ -72,7 +72,14 @@ public class ConnectionTeleop extends OpMode  {
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
         up = gamepad2.left_stick_y;
-        twist = gamepad2.right_stick_y;
+        if (gamepad2.dpad_up) {
+            twist = -0.5;
+        } else if (gamepad2.dpad_down) {
+            twist = 0.5;
+        } else {
+            twist = 0;
+        }
+        robot.motor_elevator_twist.setPower(twist);
 
         //reverse toggle
         if (gamepad1.y) {
@@ -94,7 +101,7 @@ public class ConnectionTeleop extends OpMode  {
         robot.setRightDrivePower(right/speedDecrease);
 
         //elevator control
-        robot.motor_elevator.setPower(up);
+        //robot.motor_elevator.setPower(up);
 
         //spin toggle
         if (gamepad2.right_bumper){
@@ -107,12 +114,28 @@ public class ConnectionTeleop extends OpMode  {
             spin_pressed = false;
         }
 
-        if (spin){
-            robot.cubePickUp_right.setPower(-speed_of_cubeSpin);
-            robot.cubePickUp_left.setPower(speed_of_cubeSpin);
-        }
+//        if (spin){
+//            robot.cubePickUp_right.setPower(-speed_of_cubeSpin);
+//            robot.cubePickUp_left.setPower(speed_of_cubeSpin);
+//        }
 
-        robot.motor_elevator_twist.setPower(twist);
+        double pick_left = 0;
+        if (gamepad1.left_trigger > 0.3) {
+            pick_left = -0.5;
+        } else if (gamepad1.left_bumper) {
+            pick_left = 0.5;
+        }
+        robot.cubePickUp_left.setPower(pick_left);
+
+        double pick_right = 0;
+        if (gamepad1.right_trigger > 0.3) {
+            pick_right = 0.5;
+        } else if (gamepad1.right_bumper) {
+            pick_right = -0.5;
+        }
+        robot.cubePickUp_right.setPower(pick_right);
+
+
     }
 
 }
