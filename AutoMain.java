@@ -5,10 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 //import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -22,67 +26,130 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * each auto mode should call function apolloRun.
  */
 public abstract class AutoMain extends LinearOpMode {
-    static private double FORWORD_SPEED = 0.4;
+    static private double FORWORD_SPEED = 0.5;
+    static final double HEADING_THRESHOLD = 1 ;
+    static final double P_TURN_COEFF = 0.1;
+    static final double P_DRIVE_COEFF = 0.15;
+
     VuforiaLocalizer vuforia;
     VuforiaTrackable relicTemplate;
     VuforiaTrackables relicTrackables;
     HardwareConnection robot = new HardwareConnection();
 
+    public void connectionInit() {
+        robot.init(hardwareMap);
+        initVuforia();
+    }
+
     void connectionRun(boolean isBlue, boolean leftSide) {
         robot.init(hardwareMap);
         initVuforia();
-        telemetry.addData("version: ", "5");
+
+        telemetry.addData("version: ", "6");
         telemetry.update();
 
         waitForStart();
-
+        robot.prepareForStart();
         dropBall(isBlue);
-        RelicRecoveryVuMark column = readPhoto();
-        moveToCryptoBox(isBlue, leftSide, column);
-        putCube(column);
-        goToSafeZone();
+        //RelicRecoveryVuMark column = readPhoto();
+        //moveToCryptoBox(isBlue, leftSide, column);
+        //putCube(column);
+        //goToSafeZone();
+
+        ////////////////////////// driving to safe zone
+
+        robot.setAllMotorDrivePower(FORWORD_SPEED);//gets off the balancing stone
+        sleep(1000);
+        robot.setLeftMotorDrivePower(FORWORD_SPEED);
+        robot.setRightDrivePower(-FORWORD_SPEED);//spins towards the
+        sleep(1000);
+        robot.setAllMotorDrivePower(FORWORD_SPEED);
+        sleep(490);
+        robot.setLeftMotorDrivePower(-FORWORD_SPEED);
+        robot.setRightDrivePower(FORWORD_SPEED);
+        sleep(750);
+        robot.setAllMotorDrivePower(FORWORD_SPEED);
+        sleep(250);
+        robot.setAllMotorDrivePower(0);
+
+
+        robot.cubePickUp_left.setPower(1);
+        robot.cubePickUp_right.setPower(-1);//dispences the cube [minecraft dispensore if you know what i meen]
+        sleep(2000);
+        robot.cubePickUp_left.setPower(0);
+        robot.cubePickUp_right.setPower(0);
+
+        robot.setAllMotorDrivePower(-FORWARD_SPEED);
+        sleep(200);
+
+
+
+
+
     }
 
     // Balls task: Move the ball with the other color aside.
-    private void dropBall(boolean isBlue) {
+    public void dropBall(boolean isBlue) {
         boolean isBallBlue = false;
         // TODO(): itay.s.
+        robot.ballHandTurn.setPosition(0.55);//makes sure that the hand is in the middle
+        sleep(500);
         robot.ballHandLift.setPosition(0.3);
-        sleep(1000);
+        sleep(500);
         robot.ballHandLift.setPosition(0.6);
+        sleep(500);
+        robot.ballHandLift.setPosition(0.8);
+        sleep(500);
+        robot.ballHandLift.setPosition(0.9);
+        sleep(500);
+        robot.ballHandLift.setPosition(1.0); //now its between the jewels
         sleep(1000);
 
         boolean foundColor = false;
-        for (int i = 0; i < 3; i++) {
-            if (robot.colorSensor.blue() >= 89) {
-                isBallBlue = true;
-                foundColor = true;
-                break;
-            } else if (robot.colorSensor.red() >= 97) {
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+            if (robot.colorSensor.red() > robot.colorSensor.blue() && robot.colorSensor.red() > 30){
                 isBallBlue = false;
                 foundColor = true;
-                break;
             }
-
-            robot.ballHandTurn.setPosition(-0.08);
-            sleep(100);
+            else if (robot.colorSensor.blue() > robot.colorSensor.red() && robot.colorSensor.blue() > 30){
+                isBallBlue = true;
+                foundColor = true;
+            }
+            // (!foundColor){
+            //robot.ballHandTurn.setPosition(3.3);
+            //}
         }
+        idle();
 
         if (foundColor) {
-            if (isBlue == isBallBlue) {
-                robot.ballHandTurn.setPosition(-0.7);
+            if (isBlue == isBallBlue) {//if you are blue and the ball is blue
+                robot.ballHandTurn.setPosition(0.65);//drop the blue ball that ur facing
             } else {
-                robot.ballHandTurn.setPosition(0.7);
+                robot.ballHandTurn.setPosition(0.4);//drop the red ball
             }
             sleep(1000);
         }
 
-        robot.ballHandTurn.setPosition(0);
+
+        //robot.ballHandTurn.setPosition(0.4);
+        //sleep(500);
+        //robot.ballHandTurn.setPosition(0.5);
+        //sleep(500);
+        robot.ballHandLift.setPosition(0.5);
+        sleep(2000);
+        robot.ballHandTurn.setPosition(0.55);
+
         sleep(1000);
 
         robot.ballHandLift.setPosition(0.3);
-        sleep(100);
-        robot.ballHandLift.setPosition(0);
+        sleep(1000);
+        robot.ballHandTurn.setPosition(0.05);
+        sleep(1000);
+        robot.ballHandLift.setPosition(0.2);
+        sleep(1000);
+        robot.ballHandLift.setPosition(0.1);
         sleep(1000);
     }
 
@@ -107,15 +174,12 @@ public abstract class AutoMain extends LinearOpMode {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if (isBlue) {
             if (!leftSide) {
-
                 if (column == RelicRecoveryVuMark.CENTER) {
-
                     driveStraitWithEncoder(0.4, 100);//not true value
                     turnWithEncoder(90, 0.4);
                     driveStraitWithEncoder(0.4, 20);
                 }
                 if (column == RelicRecoveryVuMark.RIGHT) {
-
                     driveStraitWithEncoder(0.4, 120);//not true value
                     turnWithEncoder(90, 0.4);
                     driveStraitWithEncoder(0.4, 20);
@@ -145,7 +209,6 @@ public abstract class AutoMain extends LinearOpMode {
             if (!leftSide) {
 
                 if (column == RelicRecoveryVuMark.CENTER) {
-
                     driveStraitWithEncoder(0.4, 100);//not true value
                     turnWithEncoder(-90, 0.4);
                     driveStraitWithEncoder(0.4, 20);
@@ -255,9 +318,221 @@ public abstract class AutoMain extends LinearOpMode {
         int targetTwist = 5 * degree;
         robot.motor_elevator_twist.setTargetPosition(targetTwist);
         robot.motor_elevator_twist.setPower(speed);
-        while (opModeIsActive() && (robot.motor_elevator_twist.isBusy()){
+        while (opModeIsActive() && robot.motor_elevator_twist.isBusy()){
             idle();
         }
         robot.motor_elevator_twist.setPower(0);
     }
+
+
+    /**
+     *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
+     *  Move will stop if either of these conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Driver stops the opmode running.
+     *
+     * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
+     * @param distanceTick   Distance (in inches) to move from current position.  Negative distance means move backwards.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     */
+    public void gyroDrive ( double speed,
+                            double distanceTick,
+                            double angle) {
+        int     newBackLeftTarget;
+        int     newBackRightTarget;
+        int     newFrontLeftTarget;
+        int     newFrontRightTarget;
+        int     moveCounts;
+        double  max;
+        double  error;
+        double  steer;
+        double  leftSpeed;
+        double  rightSpeed;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+            robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            // Determine new target position, and pass to motor controller
+            //moveCounts = (int)(distance * COUNTS_PER_INCH);
+            moveCounts = (int)(distanceTick);
+            newBackLeftTarget = robot.motor_left_back.getCurrentPosition() + moveCounts;
+            newBackRightTarget = robot.motor_right_back.getCurrentPosition() + moveCounts;
+
+            // Set Target and Turn On RUN_TO_POSITION
+            robot.motor_left_back.setTargetPosition(newBackLeftTarget);
+            robot.motor_right_back.setTargetPosition(newBackRightTarget);
+
+            robot.setMotorDriveMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // start motion.
+            speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+            robot.setAllMotorDrivePower(speed);
+
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() &&
+                    robot.motor_left_back.isBusy() &&
+                    robot.motor_right_back.isBusy()) {
+
+                // adjust relative speed based on heading error.
+                error = getError(angle);
+                steer = getSteer(error, P_DRIVE_COEFF);
+
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (distanceTick < 0)
+                    steer *= -1.0;
+
+                leftSpeed = speed - steer;
+                rightSpeed = speed + steer;
+
+                // Normalize speeds if either one exceeds +/- 1.0;
+                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+                if (max > 1.0)
+                {
+                    leftSpeed /= max;
+                    rightSpeed /= max;
+                }
+                robot.setLeftMotorDrivePower(leftSpeed);
+                robot.setRightDrivePower(rightSpeed);
+
+                // Display drive status for the driver.
+                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
+                telemetry.addData("Target",  "%7d:%7d",      newBackLeftTarget,  newBackRightTarget);
+                telemetry.addData("Actual",  "%7d:%7d",      robot.motor_left_back.getCurrentPosition(),
+                        robot.motor_right_back.getCurrentPosition());
+                telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            robot.setAllMotorDrivePower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        }
+    }
+
+    /**
+     *  Method to spin on central axis to point in a new direction.
+     *  Move will stop if either of these conditions occur:
+     *  1) Move gets to the heading (angle)
+     *  2) Driver stops the opmode running.
+     *
+     * @param speed Desired speed of turn.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     */
+    public void gyroTurn (double speed, double angle) {
+        robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // keep looping while we are still active, and not on heading.
+        while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
+            // Update telemetry & Allow time for other processes to run.
+            telemetry.update();
+        }
+    }
+
+    /**
+     *  Method to obtain & hold a heading for a finite amount of time
+     *  Move will stop once the requested time has elapsed
+     *
+     * @param speed      Desired speed of turn.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     * @param holdTime   Length of time (in seconds) to hold the specified heading.
+     */
+
+    public void gyroHold( double speed, double angle, double holdTime) {
+
+        ElapsedTime holdTimer = new ElapsedTime();
+
+        // keep looping while we have time remaining.
+        holdTimer.reset();
+        while (opModeIsActive() && (holdTimer.time() < holdTime)) {
+            // Update telemetry & Allow time for other processes to run.
+            onHeading(speed, angle, P_TURN_COEFF);
+            telemetry.update();
+        }
+
+        // Stop all motion;
+        robot.setAllMotorDrivePower(0);
+    }
+
+
+    /**
+     * Perform one cycle of closed loop heading control.
+     *
+     * @param speed     Desired speed of turn.
+     * @param angle     Absolute Angle (in Degrees) relative to last gyro reset.
+     *                  0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                  If a relative angle is required, add/subtract from current heading.
+     * @param PCoeff    Proportional Gain coefficient
+     * @return
+     */
+    boolean onHeading(double speed, double angle, double PCoeff) {
+        double   error ;
+        double   steer ;
+        boolean  onTarget = false ;
+        double leftSpeed;
+        double rightSpeed;
+
+        // determine turn power based on +/- error
+        error = getError(angle);
+
+        if (Math.abs(error) <= HEADING_THRESHOLD) {
+            steer = 0.0;
+            leftSpeed  = 0.0;
+            rightSpeed = 0.0;
+            onTarget = true;
+        }
+        else {
+            steer = getSteer(error, PCoeff);
+            rightSpeed  = speed * steer;
+            leftSpeed   = -rightSpeed;
+        }
+
+        // Send desired speeds to motors.
+        robot.setLeftMotorDrivePower(leftSpeed);
+        robot.setRightDrivePower(rightSpeed);
+
+        // Display it for the driver.
+        telemetry.addData("Target", "%5.2f", angle);
+        telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
+        telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+
+        return onTarget;
+    }
+
+    /**
+     * getError determines the error between the target angle and the robot's current heading
+     * @param   targetAngle  Desired angle (relative to global reference established at last Gyro Reset).
+     * @return  error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
+     *          +ve error means the robot should turn LEFT (CCW) to reduce error.
+     */
+    public double getError(double targetAngle) {
+
+        double robotError;
+
+        // calculate error in -179 to +180 range  (
+        robotError = targetAngle - robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        while (robotError > 180)  robotError -= 360;
+        while (robotError <= -180) robotError += 360;
+        return robotError;
+    }
+
+    /**
+     * returns desired steering force.  +/- 1 range.  +ve = steer left
+     * @param error   Error angle in robot relative degrees
+     * @param PCoeff  Proportional Gain Coefficient
+     * @return
+     */
+    public double getSteer(double error, double PCoeff) {
+        return Range.clip(error * PCoeff, -1, 1);
+    }
+
 }

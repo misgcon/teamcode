@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -36,9 +38,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+
 /**
- * This is NOT an opmode.
- * This class can be used to define all the specific hardware for the Connection robot.
+ * Connection robot.
  */
 public class HardwareConnection {
     /* Public OpMode members. */
@@ -53,6 +57,7 @@ public class HardwareConnection {
     public ColorSensor colorSensor;
     public DcMotor cubePickUp_left;
     public DcMotor cubePickUp_right;
+    BNO055IMU imu;
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
@@ -66,40 +71,55 @@ public class HardwareConnection {
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        motor_left_back = hwMap.get(DcMotor.class, "dlb");
-        motor_left_front = hwMap.get(DcMotor.class, "dlf");
-        motor_right_back = hwMap.get(DcMotor.class, "drb");
-        motor_right_front = hwMap.get(DcMotor.class, "drf");
-        //motor_elevator = hwMap.get(DcMotor.class, "lift");
-        motor_elevator_twist = hwMap.get(DcMotor.class, "twist");
-        cubePickUp_left = hwMap.get(DcMotor.class, "cal");
-        cubePickUp_right = hwMap.get(DcMotor.class, "car");
-        //ballHandLift = hwMap.get(Servo.class, "bx");
-        //7ballHandTurn = hwMap.get(Servo.class, "by");
+        motor_left_back = hwMap.get(DcMotor.class, "dlb"); // R1 M2
+        motor_left_front = hwMap.get(DcMotor.class, "dlf"); // R1 M0
+        motor_right_back = hwMap.get(DcMotor.class, "drb");  // R1 M3
+        motor_right_front = hwMap.get(DcMotor.class, "drf");  // R1 M1
+        motor_elevator = hwMap.get(DcMotor.class, "lift");
+        motor_elevator_twist = hwMap.get(DcMotor.class, "twist");  // R2 M2
+        cubePickUp_left = hwMap.get(DcMotor.class, "cal");  // R2 M0
+        cubePickUp_right = hwMap.get(DcMotor.class, "car");  // R2 M1
+        ballHandLift = hwMap.get(Servo.class, "bl"); // R1 P0
+        ballHandTurn = hwMap.get(Servo.class, "bt"); // R1 P1
 
         // define and Initialize sensors
-        //colorSensor = hwMap.get(ColorSensor.class, "bcs");
+        colorSensor = hwMap.get(ColorSensor.class, "bcs");  // R1 I2C 0 REV Color
 
         motor_left_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
         motor_right_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         motor_right_front.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        //motor_elevator.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        cubePickUp_left.setDirection(DcMotorSimple.Direction.FORWARD);
-        cubePickUp_right.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor_elevator.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        cubePickUp_left.setDirection(DcMotorSimple.Direction.REVERSE);
+        cubePickUp_right.setDirection(DcMotorSimple.Direction.REVERSE);
         motor_elevator_twist.setDirection(DcMotorSimple.Direction.FORWARD);
 
-
         //setAllMotorDrivePower(0);
-        //motor_elevator.setPower(0);
+        motor_elevator.setPower(0);
         cubePickUp_right.setPower(0);
         cubePickUp_left.setPower(0);
         motor_elevator_twist.setPower(0);
 
         //setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         cubePickUp_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        cubePickUp_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        cubePickUp_right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Set up the parameters with which we will use our IMU. Note that integration
+        // algorithm here just reports accelerations to the logcat log; it doesn't actually
+        // provide positional information.
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
+        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
+        // and named "imu".
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
         motor_elevator_twist.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
@@ -121,8 +141,11 @@ public class HardwareConnection {
 
 
     public void setMotorDriveMode(DcMotor.RunMode runMode) {
-        motor_right_front.setMode(runMode);
-        motor_left_front.setMode(runMode);
+        motor_right_back.setMode(runMode);
+        motor_left_back.setMode(runMode);
+
+        motor_right_front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor_left_front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void resetEncoder () {
@@ -132,5 +155,9 @@ public class HardwareConnection {
         motor_left_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
+    public void prepareForStart() {
+        // Start the logging of measured acceleration
+        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+    }
 }
 

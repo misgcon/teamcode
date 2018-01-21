@@ -32,93 +32,66 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
- * This OpMode ramps a single motor speed up and down repeatedly until Stop is pressed.
+ * This OpMode scans a single servo back and forwards until Stop is pressed.
  * The code is structured as a LinearOpMode
- *
- * This code assumes a DC motor configured with the name "left_drive" as is found on a pushbot.
- *
- * INCREMENT sets how much to increase/decrease the power each cycle
+ * INCREMENT sets how much to increase/decrease the servo position each cycle
  * CYCLE_MS sets the update period.
+ *
+ * This code assumes a Servo configured with the name "left claw" as is found on a pushbot.
+ *
+ * NOTE: When any servo position is set, ALL attached servos are activated, so ensure that any other
+ * connected servos are able to move freely before running this test.
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@Autonomous(name = "Concept: Ramp Motor Speed", group = "Concept")
+@Autonomous(name = "Concept: Scan Servo", group = "Concept")
 //@Disabled
-public class TestSpeedSingleMotor extends LinearOpMode {
+public class TestServo extends LinearOpMode {
 
-    static final double INCREMENT   = 0.01;     // amount to ramp motor each CYCLE_MS cycle
-    static final int    CYCLE_MS    =  2000;     // period of each cycle
-    static final double MAX_FWD     =  1.0;     // Maximum FWD power applied to motor
-    static final double MAX_REV     = -1.0;     // Maximum REV power applied to motor
+    static final double INCREMENT   = 0.1;     // amount to slew servo each CYCLE_MS cycle
+    static final int    CYCLE_MS    = 3000;     // period of each cycle
+    static final double MAX_POS     =  1.0;     // Maximum rotational position
+    static final double MIN_POS     =  1.0;     // Minimum rotational position
 
     // Define class members
-    DcMotor motor;
-    DcMotor motor2;
-    double  power   = 0;
-    boolean rampUp  = true;
+    Servo   servo;
+    double  position = MIN_POS;
+
 
 
     @Override
     public void runOpMode() {
 
-        // Connect to motor (Assume standard left wheel)
-        // Change the text in quotes to match any motor name on your robot.
-        motor =  hardwareMap.get(DcMotor.class, "drf");
-        motor2 =  hardwareMap.get(DcMotor.class, "dlf");
+        // Connect to servo (Assume PushBot Left Hand)
+        // Change the text in quotes to match any servo name on your robot.
+        servo = hardwareMap.get(Servo.class, "bt");
 
         // Wait for the start button
-        telemetry.addData(">", "Press Start to run Motors3." );
+        telemetry.addData(">", "Press Start to scan Servo." );
         telemetry.update();
         waitForStart();
 
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        // Ramp motor speeds till stop pressed.
-        while(opModeIsActive()) {
-
-            //setPower(0.1);
-            //motor.setVelocity(360, AngleUnit.DEGREES);
-            motor.setPower(0.2);
-            motor2.setPower(0.2);
-
-            telemetry.addData("speed", "0.2" );
-            telemetry.update();
-            sleep(5000);
-
-
-            //motor.setVelocity(50, AngleUnit.DEGREES);
-            motor.setPower(1);
-            motor2.setPower(1);
-
-            telemetry.addData("speed", "1" );
+        // Scan servo till stop pressed.
+        while(opModeIsActive()){
+            position += INCREMENT ;
+            // Display the current value
+            telemetry.addData("Servo Position", "%5.2f", position);
+            telemetry.addData(">", "Press Stop to end test." );
             telemetry.update();
 
-            sleep(5000);
-
+            // Set the servo to the new position and pause;
+            servo.setPosition(position);
+            sleep(CYCLE_MS);
+            idle();
         }
 
-
-
-        // Turn off motor and signal done;
-        motor.setPower(0);
+        // Signal done;
         telemetry.addData(">", "Done");
         telemetry.update();
-
     }
-
-
 }
