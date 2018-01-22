@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 /**
  * Created by itay on 20/11/2017.
  */
-@Autonomous(name="AutoBlueLeft", group="Connection")
+@Autonomous(name="AutoBlueCorner", group="Connection")
 
 public class AutoBlueLeft extends AutoMain {
 

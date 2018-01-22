@@ -58,30 +58,108 @@ public abstract class AutoMain extends LinearOpMode {
 
         ////////////////////////// driving to safe zone
 
-        robot.setAllMotorDrivePower(FORWORD_SPEED);//gets off the balancing stone
-        sleep(1000);
-        robot.setLeftMotorDrivePower(FORWORD_SPEED);
-        robot.setRightDrivePower(-FORWORD_SPEED);//spins towards the
-        sleep(1000);
-        robot.setAllMotorDrivePower(FORWORD_SPEED);
-        sleep(490);
-        robot.setLeftMotorDrivePower(-FORWORD_SPEED);
-        robot.setRightDrivePower(FORWORD_SPEED);
-        sleep(750);
-        robot.setAllMotorDrivePower(FORWORD_SPEED);
-        sleep(250);
-        robot.setAllMotorDrivePower(0);
+        if (!isBlue) {
+            if (!leftSide) {
+                robot.setAllMotorDrivePower(FORWORD_SPEED);//gets off the balancing stone
+                sleep(1000);
+                robot.setLeftMotorDrivePower(FORWORD_SPEED);
+                robot.setRightDrivePower(-FORWORD_SPEED);//spins towards the
+                sleep(1000);
+                robot.setAllMotorDrivePower(FORWORD_SPEED);
+                sleep(490);
+                robot.setLeftMotorDrivePower(-FORWORD_SPEED);
+                robot.setRightDrivePower(FORWORD_SPEED);
+                sleep(750);
+                robot.setAllMotorDrivePower(FORWORD_SPEED);
+                sleep(250);
+                robot.setAllMotorDrivePower(0);
 
+                robot.cubePickUp_left.setPower(1);
+                robot.cubePickUp_right.setPower(-1);//dispences the cube [minecraft dispensore if you know what i meen]
+                sleep(2000);
+                robot.cubePickUp_left.setPower(0);
+                robot.cubePickUp_right.setPower(0);
 
-        robot.cubePickUp_left.setPower(1);
-        robot.cubePickUp_right.setPower(-1);//dispences the cube [minecraft dispensore if you know what i meen]
-        sleep(2000);
-        robot.cubePickUp_left.setPower(0);
-        robot.cubePickUp_right.setPower(0);
+                robot.setAllMotorDrivePower(-FORWORD_SPEED);
+                sleep(100);
+                robot.setAllMotorDrivePower(0);
+            } else if (leftSide) {
+                robot.setAllMotorDrivePower(FORWORD_SPEED);//gets off the balancing stone
+                sleep(1250);
+                robot.setLeftMotorDrivePower(-FORWORD_SPEED);
+                robot.setRightDrivePower(FORWORD_SPEED);//spins towards the
+                sleep(1000);
+                robot.setAllMotorDrivePower(FORWORD_SPEED);
+                sleep(490);
 
-        robot.setAllMotorDrivePower(-FORWARD_SPEED);
-        sleep(200);
+                robot.setAllMotorDrivePower(0);
+                robot.cubePickUp_left.setPower(1);
+                robot.cubePickUp_right.setPower(-1);//dispences the cube [minecraft dispensore if you know what i meen]
+                sleep(2000);
+                robot.cubePickUp_left.setPower(0);
+                robot.cubePickUp_right.setPower(0);
 
+                robot.setAllMotorDrivePower(FORWORD_SPEED);
+                sleep(150);
+                robot.setAllMotorDrivePower(0);
+
+                robot.setAllMotorDrivePower(-FORWORD_SPEED);
+                sleep(200);
+                robot.setAllMotorDrivePower(0);
+
+            }
+        }
+        if (isBlue) {
+            if (leftSide) {
+                robot.setAllMotorDrivePower(-FORWORD_SPEED);//gets off the balancing stone
+                sleep(1500);
+                robot.setLeftMotorDrivePower(-FORWORD_SPEED);
+                robot.setRightDrivePower(FORWORD_SPEED);//spins towards the
+                sleep(1250);
+
+                robot.setAllMotorDrivePower(-FORWORD_SPEED);//gets off the balancing stone
+                sleep(820);
+                robot.setLeftMotorDrivePower(-FORWORD_SPEED);
+                robot.setRightDrivePower(FORWORD_SPEED);//spins towards the
+                sleep(800);
+                robot.setLeftMotorDrivePower(0);
+                robot.setRightDrivePower(0);//spins towards the
+
+                robot.setAllMotorDrivePower(FORWORD_SPEED);//gets off the balancing stone
+                sleep(800);
+
+                robot.setAllMotorDrivePower(0);
+                robot.cubePickUp_left.setPower(1);
+                robot.cubePickUp_right.setPower(-1);//dispences the cube [minecraft dispensore if you know what i meen]
+                sleep(2000);
+                robot.cubePickUp_left.setPower(0);
+                robot.cubePickUp_right.setPower(0);
+
+                robot.setAllMotorDrivePower(-FORWORD_SPEED);
+                sleep(200);
+                robot.setAllMotorDrivePower(0);
+            } else if (!leftSide){
+                robot.setAllMotorDrivePower(-FORWORD_SPEED);//gets off the balancing stone
+                sleep(2000);
+                robot.setLeftMotorDrivePower(-FORWORD_SPEED);
+                robot.setRightDrivePower(FORWORD_SPEED);//spins towards the
+                sleep(1250);
+                robot.setAllMotorDrivePower(FORWORD_SPEED);
+                sleep(490);
+
+                robot.setAllMotorDrivePower(0);
+                robot.cubePickUp_left.setPower(1);
+                robot.cubePickUp_right.setPower(-1);//dispences the cube [minecraft dispensore if you know what i meen]
+                sleep(1800);
+                robot.cubePickUp_left.setPower(0);
+                robot.cubePickUp_right.setPower(0);
+
+                robot.setAllMotorDrivePower(-FORWORD_SPEED);
+                sleep(85);
+                robot.setAllMotorDrivePower(0);
+
+            }
+        }
 
 
 
@@ -125,7 +203,7 @@ public abstract class AutoMain extends LinearOpMode {
 
         if (foundColor) {
             if (isBlue == isBallBlue) {//if you are blue and the ball is blue
-                robot.ballHandTurn.setPosition(0.65);//drop the blue ball that ur facing
+                robot.ballHandTurn.setPosition(0.7);//drop the blue ball that ur facing
             } else {
                 robot.ballHandTurn.setPosition(0.4);//drop the red ball
             }
@@ -256,7 +334,7 @@ public abstract class AutoMain extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = "Ac7hmPf/////AAAAmY1DFiTs+kenqbX9NbXujRAvP71bvNIwaSEsWB5HTXOb74TMHFnW9TqU/HACnA2BirmMCxCdqFJ0+Wby1+PpOLEUIjc7aSMOFF0/BUClZ5OEVeGvvfEBH4G2EkIt5tfGYhX9S4V+rnlTV6uBjSdRF8hh2XSK2oXkWWvnOGaoOJU+ku+QVwMQS/Gk4JyX0bLbgAIqGjJ3+y2Vwlqzui41Kzbc9zJgjugdvIFrOUE74mxhsEOTO7qwf6V+jeUURInrek5ycrp2weRWjJoZON0p3m1XQ/G0KwL3gTz+KMGQeoVNA76IcwRjXQBPBNKACJyCCQ29JryL84Qvf3FOll2nD5VNGL7j29wYXS01CmuaOFk0\n";
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
         relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");

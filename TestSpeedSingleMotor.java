@@ -51,7 +51,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @Autonomous(name = "Concept: Ramp Motor Speed", group = "Concept")
-//@Disabled
+@Disabled
 public class TestSpeedSingleMotor extends LinearOpMode {
 
     static final double INCREMENT   = 0.01;     // amount to ramp motor each CYCLE_MS cycle

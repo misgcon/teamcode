@@ -72,12 +72,13 @@ public class ConnectionTeleop extends OpMode  {
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
-        up = gamepad2.left_stick_y;
+        up = gamepad2.right_stick_y;
         final double Fleft = left;
+
         if (gamepad2.dpad_up) {
-            twist = -0.5;
+            twist = -0.3;
         } else if (gamepad2.dpad_down) {
-            twist = 0.5;
+            twist = 0.3;
         } else {
             twist = 0;
         }
