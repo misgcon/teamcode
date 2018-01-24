@@ -11,6 +11,6 @@ public class AutoRedLeft extends AutoMain {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        connectionRun(false, true);
+        connectionRun(false, true); //Defines the boolean values of the isBlue boolean and the leftSide boolean
     }
 }

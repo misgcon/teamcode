@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-//import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -21,40 +20,40 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
  * Created by itay on 15/11/2017.
- * <p>
  * The common class for all the auto modes.
  * each auto mode should call function apolloRun.
  */
 public abstract class AutoMain extends LinearOpMode {
-    static private double FORWORD_SPEED = 0.5;
-    static final double HEADING_THRESHOLD = 1 ;
-    static final double P_TURN_COEFF = 0.1;
-    static final double P_DRIVE_COEFF = 0.15;
+    static private double FORWORD_SPEED = 0.5; // A constant value for the speed of the DC motors.
+    static final double HEADING_THRESHOLD = 1 ; // For the Gyro sensor.
+    static final double P_TURN_COEFF = 0.1; // For the Gyro sensor.
+    static final double P_DRIVE_COEFF = 0.15; // For the Gyro sensor.
 
     VuforiaLocalizer vuforia;
     VuforiaTrackable relicTemplate;
-    VuforiaTrackables relicTrackables;
-    HardwareConnection robot = new HardwareConnection();
+    VuforiaTrackables relicTrackables; // Initialises the PictoGraph reader.
 
+    HardwareConnection robot = new HardwareConnection(); // Calls for a hardware.
+
+    // A function to initialize the hardware and the photo reader.
     public void connectionInit() {
         robot.init(hardwareMap);
         initVuforia();
     }
 
+    // The main autonomous code - uses the boolean values from the "sub" classes and the code uses them to modify the autonomous code.
     void connectionRun(boolean isBlue, boolean leftSide) {
-        robot.init(hardwareMap);
-        initVuforia();
 
-        telemetry.addData("version: ", "6");
+        telemetry.addData("version: ", "6"); // Just to know when the code is ready to run.
         telemetry.update();
 
         waitForStart();
         robot.prepareForStart();
-        dropBall(isBlue);
-        //RelicRecoveryVuMark column = readPhoto();
-        //moveToCryptoBox(isBlue, leftSide, column);
-        //putCube(column);
-        //goToSafeZone();
+        dropBall(isBlue); // The first step in autonomous - dropping the ball of the opposite color.
+        RelicRecoveryVuMark column = readPhoto(); // Second step in autonomous - reading the pictograph for putting the cube in the Cryptobox
+        moveToCryptoBox(isBlue, leftSide, column);
+        putCube(column);
+        goToSafeZone();
 
         ////////////////////////// driving to safe zone
 
