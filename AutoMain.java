@@ -251,7 +251,7 @@ public abstract class AutoMain extends LinearOpMode {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if (isBlue) {
             if (!leftSide) {
-                if (column == RelicRecoveryVuMark.CENTER) {
+                /*if (column == RelicRecoveryVuMark.CENTER) {
                     driveStraitWithEncoder(0.4, 100);//not true value
                     turnWithEncoder(90, 0.4);
                     driveStraitWithEncoder(0.4, 20);
@@ -267,9 +267,11 @@ public abstract class AutoMain extends LinearOpMode {
                     turnWithEncoder(90, 0.4);
                     driveStraitWithEncoder(0.4, 20);
                 }
+                */
 
-            } else {
-                if (column == RelicRecoveryVuMark.CENTER) {
+            }
+            else {
+                /*if (column == RelicRecoveryVuMark.CENTER) {
                     turnWithEncoder(15, 0.4);
                     driveStraitWithEncoder(0.4, 70);//not true value
                 }
@@ -281,8 +283,11 @@ public abstract class AutoMain extends LinearOpMode {
                     turnWithEncoder(20, 0.4);
                     driveStraitWithEncoder(0.4, 80);//not true value
                 }
+                */
             }
-        } else //if not blue aka;<red> {
+        }
+
+        else //if not blue aka;<red> {
             if (!leftSide) {
 
                 if (column == RelicRecoveryVuMark.CENTER) {
