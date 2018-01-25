@@ -51,11 +51,8 @@ public abstract class AutoMain extends LinearOpMode {
         robot.prepareForStart();
         dropBall(isBlue); // The first step in autonomous - dropping the ball of the opposite color.
         RelicRecoveryVuMark column = readPhoto(); // Second step in autonomous - reading the pictograph for putting the cube in the Cryptobox
-        moveToCryptoBox(isBlue, leftSide, column);
-        putCube(column);
-        goToSafeZone();
-
-        ////////////////////////// driving to safe zone
+        moveToCryptoBox(isBlue, leftSide, column); // Third step in autonomous - driving to the correct column
+        putCube(column); // Last step in autonomous - dropping the cube in the correct column and getting ready for teleop
 
         if (!isBlue) {
             if (!leftSide) {
@@ -165,13 +162,13 @@ public abstract class AutoMain extends LinearOpMode {
 
     }
 
-    // Balls task: Move the ball with the other color aside.
+    // Move the ball with the other color aside.
     public void dropBall(boolean isBlue) {
         boolean isBallBlue = false;
         // TODO(): itay.s.
-        robot.ballHandTurn.setPosition(0.55);//makes sure that the hand is in the middle
-        sleep(500);
-        robot.ballHandLift.setPosition(0.3);
+        robot.ballHandTurn.setPosition(0.55);// makes sure that the hand is in the middle.
+        sleep(500); // Delay for making sure its not going to much.
+        robot.ballHandLift.setPosition(0.3); // Drops the ball hand with slowly with delay between for a slow drop.
         sleep(500);
         robot.ballHandLift.setPosition(0.6);
         sleep(500);
@@ -179,24 +176,24 @@ public abstract class AutoMain extends LinearOpMode {
         sleep(500);
         robot.ballHandLift.setPosition(0.9);
         sleep(500);
-        robot.ballHandLift.setPosition(1.0); //now its between the jewels
-        sleep(1000);
+        robot.ballHandLift.setPosition(1.0); //Now its between the jewels.
+        sleep(1000); // Waits for the sensors to see color.
 
-        boolean foundColor = false;
+        boolean foundColor = false; // For making sure the sensor saw the color
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
+        // Waits another second for the sensor to see the color.
         while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+            // Uses two Conditions for making sure the sensor saw the correct color and sent correct value.
             if (robot.colorSensor.red() > robot.colorSensor.blue() && robot.colorSensor.red() > 30){
-                isBallBlue = false;
-                foundColor = true;
+                isBallBlue = false; // For dropping the ball.
+                foundColor = true; // For knowing that the sensor saw color
             }
+            //Same for blue.
             else if (robot.colorSensor.blue() > robot.colorSensor.red() && robot.colorSensor.blue() > 30){
                 isBallBlue = true;
                 foundColor = true;
             }
-            // (!foundColor){
-            //robot.ballHandTurn.setPosition(3.3);
-            //}
         }
         idle();
 
@@ -345,12 +342,6 @@ public abstract class AutoMain extends LinearOpMode {
         relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
 
-    }
-
-    // Park the robot
-    private void goToSafeZone() {
-        // TODO(): implement.
-        twistElevator(90, 0.4);
     }
 
     void driveStraitWithEncoder(double speed, int ticks) {
