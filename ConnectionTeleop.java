@@ -53,10 +53,11 @@ public class ConnectionTeleop extends OpMode  {
      */
     @Override
     public void init() {
-        robot.init(hardwareMap);
+        robot.init(hardwareMap);//adds all the hardware
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Connection", "Starting");
+
     }
 
     public void loop() {
@@ -73,41 +74,39 @@ public class ConnectionTeleop extends OpMode  {
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
         up = gamepad2.right_stick_y;
-        final double Fleft = left;
+        final double Fleft = left;//this is a variable that is suposed to be Forever-left
 
-        if (gamepad2.dpad_up) {
-            twist = -0.3;
-        } else if (gamepad2.dpad_down) {
-            twist = 0.3;
-        } else {
-            twist = 0;
+        if (gamepad2.dpad_up) {//is true if the upper button in dpad is pressed
+            twist = -0.3;//this drops the twister
+        } else if (gamepad2.dpad_down) {//is true if the lower button in dpad is pressed
+            twist = 0.3;//this elevates the twister
+        } else {//if none of the ubove buttons are pressed
+            twist = 0;//set two starting possition
         }
-        robot.motor_elevator_twist.setPower(twist);
+        robot.motor_elevator_twist.setPower(twist);//this changes the position of the thing that throws the cubes into the crypto box
 
         //reverse toggle
-        if (gamepad1.y) {
-            if (!reverese_pressed) {
-                reverse = !reverse;
-                reverese_pressed = true;
+        if (gamepad1.y) {//if the 'y' button is pressed
+            if (!reverese_pressed) {//if this is the first milisecond that it is pressed
+                reverse = !reverse;//reverse equals to the false if true and true if false
+                reverese_pressed = true;//this is equivalent to:"this isn't the first milisecond that 'y' is pressed"
             }
-        } else {
-            reverese_pressed = false;
+        } else {//if 'y' is not pressed
+            reverese_pressed = false;//reset to this statment:"this is the first milisecond that it is pressed"
         }
-
+       /* reverses the controls*/
         if (reverse) {
             left = -right;
             right = -Fleft;
         }
 
-        //drive control
+        //sets the power of the motors to the position of the joysticks
         robot.setLeftMotorDrivePower(left/speedDecrease);
         robot.setRightDrivePower(right/speedDecrease);
-
-        //elevator control
         robot.motor_elevator.setPower(up);
 
-        //spin toggle
-        if (gamepad2.right_bumper){
+        //toggles the spin
+        if (gamepad2.right_bumper){//if the right bumper pressed then you reverse the spin this is the same like the reverse ubove
             if (!spin_pressed){
                 spin = !spin;
                 spin_pressed = true;
@@ -121,7 +120,7 @@ public class ConnectionTeleop extends OpMode  {
 //            robot.cubePickUp_right.setPower(-speed_of_cubeSpin);
 //            robot.cubePickUp_left.setPower(speed_of_cubeSpin);
 //        }
-
+/*this changes the left_pickup to suck in or to throw out the cube*/
         double pick_left = 0;
         if (gamepad1.left_trigger > 0.3) {
             pick_left = -0.5;
@@ -129,7 +128,7 @@ public class ConnectionTeleop extends OpMode  {
             pick_left = 0.5;
         }
         robot.cubePickUp_left.setPower(pick_left);
-
+/*this changes the right_pickup to suck in or to throw out the cube*/
         double pick_right = 0;
         if (gamepad1.right_trigger > 0.3) {
             pick_right = 0.5;
