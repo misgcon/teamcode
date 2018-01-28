@@ -143,9 +143,8 @@ public class HardwareConnection {
     public void setMotorDriveMode(DcMotor.RunMode runMode) {
         motor_right_back.setMode(runMode);
         motor_left_back.setMode(runMode);
-
-        motor_right_front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor_left_front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor_right_front.setMode(runMode);
+        motor_left_front.setMode(runMode);
     }
 
     public void resetEncoder () {

@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.internal.ui.GamepadUser;
-@Disabled
+//@Disabled
 @TeleOp(name = "encoderCheck", group = "Connection")
 public class encoderCheck extends OpMode {
     /* Declare OpMode members. */
@@ -47,9 +47,9 @@ public class encoderCheck extends OpMode {
     @Override
     public void init() {
         robot.init(hardwareMap);
-
+        telemetry.update();
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot.motor_elevator_twist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motor_elevator_twist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Connection", "Starting");
     }
@@ -57,18 +57,18 @@ public class encoderCheck extends OpMode {
     public void loop() {
         double left;
         double right;
-        //double up;
+        double up;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
-        //up = gamepad1.right_stick_x;
+        up = gamepad1.right_stick_x;
 
 
         robot.setRightDrivePower(right/2);
         robot.setLeftMotorDrivePower(left/2);
 
-        //robot.motor_elevator_twist.setPower(up/2);
+        robot.motor_elevator_twist.setPower(up/2);
 
 
         telemetry.addData("left motor front", robot.motor_left_front.getCurrentPosition());
