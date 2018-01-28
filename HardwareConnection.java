@@ -84,7 +84,7 @@ public class HardwareConnection {
 
         // define and Initialize sensors
         colorSensor = hwMap.get(ColorSensor.class, "bcs");  // R1 I2C 0 REV Color
-
+//some motors needs to be reverse to drive strait - sets the motors to their identification position
         motor_left_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
         motor_right_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
@@ -94,12 +94,12 @@ public class HardwareConnection {
         cubePickUp_right.setDirection(DcMotorSimple.Direction.REVERSE);
         motor_elevator_twist.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        //setAllMotorDrivePower(0);
+        //sets All Motor Drive Power to zero
         motor_elevator.setPower(0);
         cubePickUp_right.setPower(0);
         cubePickUp_left.setPower(0);
         motor_elevator_twist.setPower(0);
-
+//sets the dcmotors that don't use incoder to 'RUN_WITHOUT_ENCODER'
         //setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         cubePickUp_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -140,21 +140,21 @@ public class HardwareConnection {
     }
 
 
-    public void setMotorDriveMode(DcMotor.RunMode runMode) {
+    public void setMotorDriveMode(DcMotor.RunMode runMode) {//sets the drive mode of all the motors and makes them drive without encoder
         motor_right_back.setMode(runMode);
         motor_left_back.setMode(runMode);
         motor_right_front.setMode(runMode);
         motor_left_front.setMode(runMode);
     }
 
-    public void resetEncoder () {
+    public void resetEncoder () {//resets the ecoder in the motors that have encoder
         motor_right_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor_right_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor_left_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor_left_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void prepareForStart() {
+    public void prepareForStart() {//prepares the robot and or code for start
         // Start the logging of measured acceleration
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
     }
