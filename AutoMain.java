@@ -247,77 +247,52 @@ public abstract class AutoMain extends LinearOpMode {
         // TODO(): implement.
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if (isBlue) {
-            if (!leftSide) {
-                /*if (column == RelicRecoveryVuMark.CENTER) {
-                    driveStraitWithEncoder(0.4, 100);//not true value
-                    turnWithEncoder(90, 0.4);
-                    driveStraitWithEncoder(0.4, 20);
+            if (leftSide) {
+                gyroDrive(-0.4, 1000, 30);
+                robot.motor_elevator_twist.setTargetPosition(robot.motor_elevator_twist.getCurrentPosition() + 500);
+                robot.motor_elevator_twist.setPower(0.4);
+                while (robot.motor_elevator_twist.isBusy()) {
+                    idle();
                 }
-                if (column == RelicRecoveryVuMark.RIGHT) {
-                    driveStraitWithEncoder(0.4, 120);//not true value
-                    turnWithEncoder(90, 0.4);
-                    driveStraitWithEncoder(0.4, 20);
+                robot.motor_elevator_twist.setPower(0.0);
+                sleep(500);
+                robot.motor_elevator_twist.setTargetPosition(robot.motor_elevator_twist.getCurrentPosition() - 500);
+                robot.motor_elevator_twist.setPower(-0.4);
+                while (robot.motor_elevator_twist.isBusy()) {
+                    idle();
                 }
-                if (column == RelicRecoveryVuMark.LEFT) {
+                robot.motor_elevator_twist.setPower(0.0);
+                gyroDrive(0.4, 100, 30);
+            }
 
-                    driveStraitWithEncoder(0.4, 130);//not true value
-                    turnWithEncoder(90, 0.4);
-                    driveStraitWithEncoder(0.4, 20);
+            else {
+                gyroDrive(-0.4, 1000, 0);
+                gyroTurn(-0.4, 90);
+                gyroDrive(-0.4, 600, 90);
+                robot.motor_elevator_twist.setTargetPosition(robot.motor_elevator_twist.getCurrentPosition() + 500);
+                robot.motor_elevator_twist.setPower(0.4);
+                while (robot.motor_elevator_twist.isBusy()) {
+                    idle();
                 }
-                */
+                robot.motor_elevator_twist.setPower(0.0);
+                sleep(500);
+                robot.motor_elevator_twist.setTargetPosition(robot.motor_elevator_twist.getCurrentPosition() - 500);
+                robot.motor_elevator_twist.setPower(0.4);
+                while (robot.motor_elevator_twist.isBusy()) {
+                    idle();
+                }
+                robot.motor_elevator_twist.setPower(0.0);
+                gyroDrive(0.4, 100, 30);
+            }
+
+        }
+        else //if not blue aka;<red> {
+            if (leftSide) {
+            gyroDrive(0.4, 1000, 0);
 
             }
             else {
-                /*if (column == RelicRecoveryVuMark.CENTER) {
-                    turnWithEncoder(15, 0.4);
-                    driveStraitWithEncoder(0.4, 70);//not true value
-                }
-                if (column == RelicRecoveryVuMark.RIGHT) {
-                    turnWithEncoder(18, 0.4);
-                    driveStraitWithEncoder(0.4, 75);//not true value
-                }
-                if (column == RelicRecoveryVuMark.LEFT) {
-                    turnWithEncoder(20, 0.4);
-                    driveStraitWithEncoder(0.4, 80);//not true value
-                }
-                */
-            }
-        }
 
-        else //if not blue aka;<red> {
-            if (!leftSide) {
-
-                if (column == RelicRecoveryVuMark.CENTER) {
-                    driveStraitWithEncoder(0.4, 100);//not true value
-                    turnWithEncoder(-90, 0.4);
-                    driveStraitWithEncoder(0.4, 20);
-                }
-                if (column == RelicRecoveryVuMark.RIGHT) {
-
-                    driveStraitWithEncoder(0.4, 120);//not true value
-                    turnWithEncoder(-90, 0.4);
-                    driveStraitWithEncoder(0.4, 20);
-                }
-                if (column == RelicRecoveryVuMark.LEFT) {
-
-                    driveStraitWithEncoder(0.4, 130);//not true value
-                    turnWithEncoder(-90, 0.4);
-                    driveStraitWithEncoder(0.4, 20);
-                }
-
-            } else {
-                if (column == RelicRecoveryVuMark.CENTER) {
-                    turnWithEncoder(-15, 0.4);
-                    driveStraitWithEncoder(0.4, 70);//not true value
-                }
-                if (column == RelicRecoveryVuMark.RIGHT) {
-                    turnWithEncoder(-18, 0.4);
-                    driveStraitWithEncoder(0.4, 75);//not true value
-                }
-                if (column == RelicRecoveryVuMark.LEFT) {
-                    turnWithEncoder(-20, 0.4);
-                    driveStraitWithEncoder(0.4, 80);//not true value
-                }
             }
     }
 

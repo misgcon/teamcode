@@ -84,7 +84,7 @@ public class HardwareConnection {
 
         // define and Initialize sensors
         colorSensor = hwMap.get(ColorSensor.class, "bcs");  // R1 I2C 0 REV Color
-//some motors needs to be reverse to drive strait - sets the motors to their identification position
+        //some motors needs to be reverse to drive strait - sets the motors to their identification position
         motor_left_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
         motor_right_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
@@ -157,6 +157,11 @@ public class HardwareConnection {
     public void prepareForStart() {//prepares the robot and or code for start
         // Start the logging of measured acceleration
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+    }
+
+    public void cubePickUpSpeed(double Speed) {
+        cubePickUp_right.setPower(Speed);
+        cubePickUp_left.setPower(Speed);
     }
 }
 

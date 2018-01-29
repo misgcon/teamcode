@@ -28,6 +28,7 @@
  */
 
 package org.firstinspires.ftc.teamcode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -47,7 +48,7 @@ public class ConnectionTeleop extends OpMode  {
     private double speedDecrease = 2.0;
     private boolean reverse = false;
     private boolean reverese_pressed = false;
-    private double speed_of_cubeSpin = 0.5; //Todo(): find a value that works
+    private double speed_of_cubeSpin = 0.5;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -57,6 +58,7 @@ public class ConnectionTeleop extends OpMode  {
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Connection", "Starting");
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -74,7 +76,7 @@ public class ConnectionTeleop extends OpMode  {
         left = gamepad1.left_stick_y;
         right = gamepad1.right_stick_y;
         up = gamepad2.right_stick_y;
-        final double Fleft = left;//this is a variable that is suposed to be Forever-left
+        final double Fleft = left;//this is a variable that is supposed to be Forever-left
 
         if (gamepad2.dpad_up) {//is true if the upper button in dpad is pressed
             twist = -0.3;//this drops the twister

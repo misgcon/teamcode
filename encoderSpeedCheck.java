@@ -38,8 +38,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.internal.ui.GamepadUser;
 //@Disabled
-@TeleOp(name = "encoderCheck", group = "Connection")
-public class encoderCheck extends OpMode {
+@TeleOp(name = "encoderSpeedCheck", group = "Connection")
+public class encoderSpeedCheck extends OpMode {
     /* Declare OpMode members. */
     HardwareConnection robot = new HardwareConnection();
 
@@ -48,10 +48,9 @@ public class encoderCheck extends OpMode {
     public void init() {
         robot.init(hardwareMap);
         telemetry.update();
-        robot.resetEncoder();
-        robot.motor_right_back.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motor_left_back.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot.motor_elevator_twist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motor_elevator_twist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Connection", "Starting");
     }
@@ -59,7 +58,7 @@ public class encoderCheck extends OpMode {
     public void loop() {
         double left;
         double right;
-        //double up;
+        double up;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = gamepad1.left_stick_y;
@@ -67,12 +66,14 @@ public class encoderCheck extends OpMode {
         //up = gamepad1.right_stick_x;
 
 
-        robot.setRightDrivePower(right/2);
-        robot.setLeftMotorDrivePower(left/2);
+       robot.setRightDrivePower(right/5);
+        robot.setLeftMotorDrivePower(left/5);
+
+
 
         //robot.motor_elevator_twist.setPower(up/2);
 
-        telemetry.update();
+
         telemetry.addData("left motor front", robot.motor_left_front.getCurrentPosition());
         telemetry.addData("left motor back", robot.motor_left_back.getCurrentPosition());
         telemetry.addData("right motor front", robot.motor_right_front.getCurrentPosition());
