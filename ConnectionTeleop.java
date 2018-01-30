@@ -140,6 +140,15 @@ public class ConnectionTeleop extends OpMode  {
         robot.cubePickUp_right.setPower(pick_right);
 
 
+
+        telemetry.update();
+        telemetry.addData("left motor front", robot.motor_left_front.getCurrentPosition());
+        telemetry.addData("left motor back", robot.motor_left_back.getCurrentPosition());
+        telemetry.addData("right motor front", robot.motor_right_front.getCurrentPosition());
+        telemetry.addData("right motor back", robot.motor_right_back.getCurrentPosition());
+        //telemetry.addData("elevator", robot.motor_elevator_twist.getCurrentPosition());
+        telemetry.addData("left stick", gamepad1.left_stick_y);
+        telemetry.addData("right stick", gamepad1.right_stick_y);
     }
 
 }

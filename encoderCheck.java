@@ -49,8 +49,7 @@ public class encoderCheck extends OpMode {
         robot.init(hardwareMap);
         telemetry.update();
         robot.resetEncoder();
-        robot.motor_right_back.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motor_left_back.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //robot.motor_elevator_twist.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Connection", "Starting");
