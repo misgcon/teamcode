@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 /**
  * Created by itay on 20/11/2017.
  */
-@Disabled
+
 @Autonomous(name="Camera", group="Connection")
 
 public class TestCamera extends AutoMain {

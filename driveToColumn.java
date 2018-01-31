@@ -64,8 +64,8 @@ import org.firstinspires.ftc.teamcode.HardwareConnection;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="square", group="Pushbot")
-public class square extends LinearOpMode {
+@Autonomous(name="driveToCrypto", group="Pushbot")
+public class driveToColumn extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareConnection robot   = new HardwareConnection();
@@ -73,6 +73,8 @@ public class square extends LinearOpMode {
 
     static final double     DRIVE_SPEED             = 0.5;
     static final double     TURN_SPEED              = 0.3;
+    static final double     FORWORD_SPEED             = 0.5;
+
 
     @Override
     public void runOpMode() {
@@ -95,7 +97,7 @@ public class square extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        for (int i = 2; i > 0; i--){
+        /*for (int i = 2; i > 0; i--){
             driveStraitWithEncoder(DRIVE_SPEED, 2000);
             turnWithEncoder(90, TURN_SPEED);
             driveStraitWithEncoder(DRIVE_SPEED, 2000);
@@ -104,7 +106,17 @@ public class square extends LinearOpMode {
             turnWithEncoder(90, TURN_SPEED);
             //driveStraitWithEncoder(DRIVE_SPEED, 2000);
         }
+        */
 
+        driveStraitWithEncoder(FORWORD_SPEED, 2000);
+        turnWithEncoder(90, -FORWORD_SPEED);
+        driveStraitWithEncoder(FORWORD_SPEED, 750);
+        turnWithEncoder(90, FORWORD_SPEED);
+        driveStraitWithEncoder(FORWORD_SPEED, 500);
+        robot.cubePickUpSpeed(1.0);
+        sleep(2000);
+        robot.cubePickUpSpeed(0.0);
+        driveStraitWithEncoder(-FORWORD_SPEED, 200);
 
         sleep(1000);     // pause for servos to move
 

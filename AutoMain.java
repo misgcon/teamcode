@@ -54,112 +54,6 @@ public abstract class AutoMain extends LinearOpMode {
         moveToCryptoBox(isBlue, leftSide, column); // Third step in autonomous - driving to the correct column
         putCube(column); // Last step in autonomous - dropping the cube in the correct column and getting ready for teleop
 
-        if (!isBlue) {
-            if (!leftSide) {
-                robot.setAllMotorDrivePower(FORWORD_SPEED);//gets off the balancing stone
-                sleep(1000);
-                robot.setLeftMotorDrivePower(FORWORD_SPEED);
-                robot.setRightDrivePower(-FORWORD_SPEED);//spins towards the
-                sleep(1000);
-                robot.setAllMotorDrivePower(FORWORD_SPEED);
-                sleep(490);
-                robot.setLeftMotorDrivePower(-FORWORD_SPEED);
-                robot.setRightDrivePower(FORWORD_SPEED);
-                sleep(750);
-                robot.setAllMotorDrivePower(FORWORD_SPEED);
-                sleep(250);
-                robot.setAllMotorDrivePower(0);
-
-                robot.cubePickUp_left.setPower(1);
-                robot.cubePickUp_right.setPower(-1);//dispences the cube [minecraft dispensore if you know what i meen]
-                sleep(2000);
-                robot.cubePickUp_left.setPower(0);
-                robot.cubePickUp_right.setPower(0);
-
-                robot.setAllMotorDrivePower(-FORWORD_SPEED);
-                sleep(100);
-                robot.setAllMotorDrivePower(0);
-            } else if (leftSide) {
-                robot.setAllMotorDrivePower(FORWORD_SPEED);//gets off the balancing stone
-                sleep(1250);
-                robot.setLeftMotorDrivePower(-FORWORD_SPEED);
-                robot.setRightDrivePower(FORWORD_SPEED);//spins towards the
-                sleep(1000);
-                robot.setAllMotorDrivePower(FORWORD_SPEED);
-                sleep(490);
-
-                robot.setAllMotorDrivePower(0);
-                robot.cubePickUp_left.setPower(1);
-                robot.cubePickUp_right.setPower(-1);//dispences the cube [minecraft dispensore if you know what i meen]
-                sleep(2000);
-                robot.cubePickUp_left.setPower(0);
-                robot.cubePickUp_right.setPower(0);
-
-                robot.setAllMotorDrivePower(FORWORD_SPEED);
-                sleep(150);
-                robot.setAllMotorDrivePower(0);
-
-                robot.setAllMotorDrivePower(-FORWORD_SPEED);
-                sleep(200);
-                robot.setAllMotorDrivePower(0);
-
-            }
-        }
-        if (isBlue) {
-            if (leftSide) {
-                robot.setAllMotorDrivePower(-FORWORD_SPEED);//gets off the balancing stone
-                sleep(1500);
-                robot.setLeftMotorDrivePower(-FORWORD_SPEED);
-                robot.setRightDrivePower(FORWORD_SPEED);//spins towards the
-                sleep(1250);
-
-                robot.setAllMotorDrivePower(-FORWORD_SPEED);//gets off the balancing stone
-                sleep(820);
-                robot.setLeftMotorDrivePower(-FORWORD_SPEED);
-                robot.setRightDrivePower(FORWORD_SPEED);//spins towards the
-                sleep(800);
-                robot.setLeftMotorDrivePower(0);
-                robot.setRightDrivePower(0);//spins towards the
-
-                robot.setAllMotorDrivePower(FORWORD_SPEED);//gets off the balancing stone
-                sleep(800);
-
-                robot.setAllMotorDrivePower(0);
-                robot.cubePickUp_left.setPower(1);
-                robot.cubePickUp_right.setPower(-1);//dispences the cube [minecraft dispensore if you know what i meen]
-                sleep(2000);
-                robot.cubePickUp_left.setPower(0);
-                robot.cubePickUp_right.setPower(0);
-
-                robot.setAllMotorDrivePower(-FORWORD_SPEED);
-                sleep(200);
-                robot.setAllMotorDrivePower(0);
-            } else if (!leftSide){
-                robot.setAllMotorDrivePower(-FORWORD_SPEED);//gets off the balancing stone
-                sleep(2000);
-                robot.setLeftMotorDrivePower(-FORWORD_SPEED);
-                robot.setRightDrivePower(FORWORD_SPEED);//spins towards the
-                sleep(1250);
-                robot.setAllMotorDrivePower(FORWORD_SPEED);
-                sleep(490);
-
-                robot.setAllMotorDrivePower(0);
-                robot.cubePickUp_left.setPower(1);
-                robot.cubePickUp_right.setPower(-1);//dispences the cube [minecraft dispensore if you know what i meen]
-                sleep(1800);
-                robot.cubePickUp_left.setPower(0);
-                robot.cubePickUp_right.setPower(0);
-
-                robot.setAllMotorDrivePower(-FORWORD_SPEED);
-                sleep(85);
-                robot.setAllMotorDrivePower(0);
-
-            }
-        }
-
-
-
-
     }
 
     // Move the ball with the other color aside.
@@ -248,47 +142,34 @@ public abstract class AutoMain extends LinearOpMode {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if (isBlue) {
             if (leftSide) {
-                gyroDrive(-0.4, 1000, 30);
-                robot.motor_elevator_twist.setTargetPosition(robot.motor_elevator_twist.getCurrentPosition() + 500);
-                robot.motor_elevator_twist.setPower(0.4);
-                while (robot.motor_elevator_twist.isBusy()) {
-                    idle();
-                }
-                robot.motor_elevator_twist.setPower(0.0);
-                sleep(500);
-                robot.motor_elevator_twist.setTargetPosition(robot.motor_elevator_twist.getCurrentPosition() - 500);
-                robot.motor_elevator_twist.setPower(-0.4);
-                while (robot.motor_elevator_twist.isBusy()) {
-                    idle();
-                }
-                robot.motor_elevator_twist.setPower(0.0);
-                gyroDrive(0.4, 100, 30);
+                driveStraitWithEncoder(FORWORD_SPEED, 2000);
+                turnWithEncoder(90, -FORWORD_SPEED);
+                driveStraitWithEncoder(FORWORD_SPEED, 750);
+                turnWithEncoder(90, FORWORD_SPEED);
+                driveStraitWithEncoder(FORWORD_SPEED, 500);
+                robot.cubePickUpSpeed(1.0);
+                sleep(2000);
+                robot.cubePickUpSpeed(0.0);
+                driveStraitWithEncoder(-FORWORD_SPEED, 200);
             }
 
             else {
-                gyroDrive(-0.4, 1000, 0);
-                gyroTurn(-0.4, 90);
-                gyroDrive(-0.4, 600, 90);
-                robot.motor_elevator_twist.setTargetPosition(robot.motor_elevator_twist.getCurrentPosition() + 500);
-                robot.motor_elevator_twist.setPower(0.4);
-                while (robot.motor_elevator_twist.isBusy()) {
-                    idle();
-                }
-                robot.motor_elevator_twist.setPower(0.0);
-                sleep(500);
-                robot.motor_elevator_twist.setTargetPosition(robot.motor_elevator_twist.getCurrentPosition() - 500);
-                robot.motor_elevator_twist.setPower(0.4);
-                while (robot.motor_elevator_twist.isBusy()) {
-                    idle();
-                }
-                robot.motor_elevator_twist.setPower(0.0);
-                gyroDrive(0.4, 100, 30);
+                driveStraitWithEncoder(-FORWORD_SPEED, 1500);
+                turnWithEncoder(90, -FORWORD_SPEED);
+                driveStraitWithEncoder(-FORWORD_SPEED, 1500);
+                robot.cubePickUpSpeed(1.0);
+                sleep(2000);
+                robot.cubePickUpSpeed(0.0);
+                driveStraitWithEncoder(-FORWORD_SPEED, 200);
+
+
+
+
             }
 
         }
         else //if not blue aka;<red> {
             if (leftSide) {
-            gyroDrive(0.4, 1000, 0);
 
             }
             else {
@@ -346,8 +227,8 @@ public abstract class AutoMain extends LinearOpMode {
     void turnWithEncoder(int degree, double speed) {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.resetEncoder();
-        int leftTargetBack = -5 * degree;
-        int rightTargetBack = 5 * degree;
+        int leftTargetBack = -28 * degree;
+        int rightTargetBack = 28 * degree;
         robot.motor_left_back.setTargetPosition(leftTargetBack);
         robot.motor_right_front.setTargetPosition(rightTargetBack);
         robot.motor_right_front.setPower(speed);
