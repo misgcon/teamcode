@@ -161,7 +161,7 @@ public class HardwareConnection {
 
     public void cubePickUpSpeed(double Speed) {
         cubePickUp_right.setPower(Speed);
-        cubePickUp_left.setPower(Speed);
+        cubePickUp_left.setPower(-Speed);
     }
 }
 

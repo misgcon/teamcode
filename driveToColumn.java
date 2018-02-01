@@ -74,6 +74,9 @@ public class driveToColumn extends LinearOpMode {
     static final double     DRIVE_SPEED             = 0.5;
     static final double     TURN_SPEED              = 0.3;
     static final double     FORWORD_SPEED             = 0.5;
+    int middleTicks = 1750;
+    int leftTicks = 2100;
+    int rightTicks = 1400;
 
 
     @Override
@@ -108,15 +111,16 @@ public class driveToColumn extends LinearOpMode {
         }
         */
 
-        driveStraitWithEncoder(FORWORD_SPEED, 2000);
-        turnWithEncoder(90, -FORWORD_SPEED);
-        driveStraitWithEncoder(FORWORD_SPEED, 750);
+        driveStraitWithEncoder(FORWORD_SPEED, 3000);
+        turnWithEncoder(-90, FORWORD_SPEED);
+        driveStraitWithEncoder(FORWORD_SPEED, leftTicks);
         turnWithEncoder(90, FORWORD_SPEED);
-        driveStraitWithEncoder(FORWORD_SPEED, 500);
-        robot.cubePickUpSpeed(1.0);
+        driveStraitWithEncoder(FORWORD_SPEED, 1000);
+        driveStraitWithEncoder(FORWORD_SPEED, -100);
+        robot.cubePickUpSpeed(-1.0);
         sleep(2000);
         robot.cubePickUpSpeed(0.0);
-        driveStraitWithEncoder(-FORWORD_SPEED, 200);
+        driveStraitWithEncoder(FORWORD_SPEED, -200);
 
         sleep(1000);     // pause for servos to move
 

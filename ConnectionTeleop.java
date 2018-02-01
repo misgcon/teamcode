@@ -45,7 +45,7 @@ public class ConnectionTeleop extends OpMode  {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     HardwareConnection robot = new HardwareConnection();
-    private double speedDecrease = 2.0;
+    private double speedDecrease = 1.5;
     private boolean reverse = false;
     private boolean reverese_pressed = false;
     private double speed_of_cubeSpin = 0.5;
@@ -58,7 +58,6 @@ public class ConnectionTeleop extends OpMode  {
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Connection", "Starting");
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -105,7 +104,7 @@ public class ConnectionTeleop extends OpMode  {
         //sets the power of the motors to the position of the joysticks
         robot.setLeftMotorDrivePower(left/speedDecrease);
         robot.setRightDrivePower(right/speedDecrease);
-        robot.motor_elevator.setPower(up);
+        robot.motor_elevator.setPower(-up);
 
         //toggles the spin
         if (gamepad2.right_bumper){//if the right bumper pressed then you reverse the spin this is the same like the reverse ubove
