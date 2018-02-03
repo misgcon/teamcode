@@ -30,39 +30,20 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.HardwareConnection;
-
-/**
- * This file illustrates the concept of driving a path based on encoder counts.
- * It uses the common Pushbot hardware class to define the drive on the robot.
- * The code is structured as a LinearOpMode
- *
- * The code REQUIRES that you DO have encoders on the wheels,
- *   otherwise you would use: PushbotAutoDriveByTime;
- *
- *  This code ALSO requires that the drive Motors have been configured such that a positive
- *  power command moves them forwards, and causes the encoders to count UP.
- *
- *   The desired path in this example is:
- *   - Drive forward for 48 inches
- *   - Spin right for 12 Inches
- *   - Drive Backwards for 24 inches
- *   - Stop and close the claw.
- *
- *  The code is written using a method called: encoderDrive(speed, leftInches, rightInches, timeoutS)
- *  that performs the actual movement.
- *  This methods assumes that each movement is relative to the last stopping place.
- *  There are other ways to perform encoder based moves, but this method is probably the simplest.
- *  This code uses the RUN_TO_POSITION mode to enable the Motor controllers to generate the run profile
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
+/*
+ * This is a testing code.
+ * It tests the robot to see if it can make a square.
+ * 'Making a square' is making the robot drive 2000
+ * ticks and turn 90 degrees and repeat this 4 times.
+ * The code's purposes is to test the encoders in the robot.
+ * This code will not be used in any tournament so we will
+ * disable it when we won't need it.
+ * >This code uses LinearOpMode<
+*/
 
 @Autonomous(name="square", group="Pushbot")
 public class square extends LinearOpMode {
@@ -77,27 +58,21 @@ public class square extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
         robot.init(hardwareMap);
 
-        // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
         robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        for (int i = 2; i > 0; i--){
-            driveStraitWithEncoder(DRIVE_SPEED, 2000);
-            turnWithEncoder(90, TURN_SPEED);
+        // Step through each leg of the path,todo!!! are we suposed to keep this comment or delete it
+        /** Note: Reverse movement is obtained by setting a negative distance (not speed)*/
+        for (int i = 2; i > 0; i--){//repeats the code twice
+            driveStraitWithEncoder(DRIVE_SPEED, 2000);//This makes the robot drive strait
+            turnWithEncoder(90, TURN_SPEED);//This turns the robot 90 degrees
             driveStraitWithEncoder(DRIVE_SPEED, 2000);
             turnWithEncoder(90, TURN_SPEED);
             driveStraitWithEncoder(DRIVE_SPEED, 2000);
@@ -108,23 +83,15 @@ public class square extends LinearOpMode {
 
         sleep(1000);     // pause for servos to move
 
-        telemetry.addData("Path", "Complete");
+        telemetry.addData("Path", "Complete");//sends a message to show that the code has been acted out
         telemetry.update();
     }
 
-    /*
-     *  Method to perfmorm a relative move, based on encoder counts.
-     *  Encoders are not reset as the move is based on the current position.
-     *  Move will stop if any of three conditions occur:
-     *  1) Move gets to the desired position
-     *  2) Move runs out of time
-     *  3) Driver stops the opmode running.
-     */
-
-
+//this part utilizes what we have stated above
     void driveStraitWithEncoder(double speed, int ticks) {
         //robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.resetEncoder();
+        robot.resetEncoders();
+        /* sets the distance that is desired to drive */
         int leftTargetBack = robot.motor_left_back.getCurrentPosition() + ticks;
         int leftTargetFront = robot.motor_left_front.getCurrentPosition() + ticks;
         int rightTargetBack = robot.motor_left_back.getCurrentPosition() + ticks;
@@ -134,9 +101,10 @@ public class square extends LinearOpMode {
         robot.motor_left_front.setTargetPosition(leftTargetFront);
         robot.motor_right_back.setTargetPosition(rightTargetBack);
         robot.motor_right_front.setTargetPosition(rightTargetFront);
-
+      /*dries towards the desired position */
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.setAllMotorDrivePower(speed);
+        /*waits for the motors to finish running*/
         while (opModeIsActive() &&
                 (robot.motor_left_back.isBusy()) &&
                 (robot.motor_right_front.isBusy()) &&
@@ -144,23 +112,24 @@ public class square extends LinearOpMode {
                 (robot.motor_left_front.isBusy())) {
             idle();
         }
-        robot.setAllMotorDrivePower(0);
+        robot.setAllMotorDrivePower(0);//stops all motors
     }
-
-    // just as a placeHolder, 1 degree of spin is 5 ticks, to turn left its positive degrees and to turn right its negative.
+     /*this is the code that allows the robot to turn using encoder*/
+    /** just as a placeHolder, 1 degree of spin is 5 ticks, to turn left its positive degrees and to turn right its negative.*/
     void turnWithEncoder(int degree, double speed) {
         //robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.resetEncoder();
-        int leftTarget = -18 * degree;
+        robot.resetEncoders();//resets all encoders
+        /*sets a target position to where to turn*/
+        int leftTarget = -18 * degree;//we times the amount of degrees we want to spin by 18 to make the amount of tick nessesary to do so
         int rightTarget = 18 * degree;
         robot.motor_left_back.setTargetPosition(leftTarget);
         robot.motor_left_front.setTargetPosition(leftTarget);
         robot.motor_right_back.setTargetPosition(rightTarget);
         robot.motor_right_front.setTargetPosition(rightTarget);
-
+       /*goes to the position that we assigned it*/
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.setAllMotorDrivePower(speed);
-
+      /*doen't do anything until the robot finished its cource*/
         while (opModeIsActive() &&
                 (robot.motor_left_back.isBusy()) &&
                 (robot.motor_right_front.isBusy()) &&
@@ -168,6 +137,6 @@ public class square extends LinearOpMode {
                 (robot.motor_left_front.isBusy())) {
             idle();
         }
-        robot.setAllMotorDrivePower(0.0);
+        robot.setAllMotorDrivePower(0.0);//stops the motors
     }
 }
