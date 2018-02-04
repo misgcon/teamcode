@@ -117,7 +117,7 @@ public class HardwareConnection {
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
-        imu = hwMap.get(BNO055IMU.class, "imu");
+        imu = hwMap.get(BNO055IMU.class, "imu 1");
         imu.initialize(parameters);
 
         motor_elevator_twist.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

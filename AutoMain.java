@@ -123,15 +123,13 @@ public abstract class AutoMain extends LinearOpMode {
 
     // Read photo and return the column to put the cube in.
     public RelicRecoveryVuMark readPhoto() {
-        relicTrackables.activate();
+        //relicTrackables.activate();
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 2.0)) {
-            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-                telemetry.addData("VuMark", "%s visible", vuMark);
-                return vuMark;
-            }
+        while (opModeIsActive()) {
+            RelicRecoveryVuMark column = readPhoto();
+            telemetry.addData("VuMark", "%s visible", column);
+            telemetry.update();
         }
         return RelicRecoveryVuMark.UNKNOWN;
     }
@@ -282,17 +280,24 @@ public abstract class AutoMain extends LinearOpMode {
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
-            robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+          //  robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             // Determine new target position, and pass to motor controller
             //moveCounts = (int)(distance * COUNTS_PER_INCH);
             moveCounts = (int)(distanceTick);
             newBackLeftTarget = robot.motor_left_back.getCurrentPosition() + moveCounts;
             newBackRightTarget = robot.motor_right_back.getCurrentPosition() + moveCounts;
+            newFrontRightTarget = robot.motor_right_front.getCurrentPosition() + moveCounts;
+            newFrontLeftTarget = robot.motor_left_front.getCurrentPosition() + moveCounts;
+
+
 
             // Set Target and Turn On RUN_TO_POSITION
             robot.motor_left_back.setTargetPosition(newBackLeftTarget);
             robot.motor_right_back.setTargetPosition(newBackRightTarget);
+            robot.motor_right_front.setTargetPosition(newFrontRightTarget);
+            robot.motor_left_front.setTargetPosition(newFrontLeftTarget);
+
 
             robot.setMotorDriveMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -303,7 +308,9 @@ public abstract class AutoMain extends LinearOpMode {
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
                     robot.motor_left_back.isBusy() &&
-                    robot.motor_right_back.isBusy()) {
+                    robot.motor_right_back.isBusy() &&
+                    robot.motor_right_front.isBusy() &&
+                    robot.motor_left_front.isBusy()) {
 
                 // adjust relative speed based on heading error.
                 error = getError(angle);
@@ -356,8 +363,7 @@ public abstract class AutoMain extends LinearOpMode {
      *                   If a relative angle is required, add/subtract from current heading.
      */
     public void gyroTurn (double speed, double angle) {
-        robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         // keep looping while we are still active, and not on heading.
         while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
             // Update telemetry & Allow time for other processes to run.
