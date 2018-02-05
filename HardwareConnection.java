@@ -85,11 +85,11 @@ public class HardwareConnection {
         // define and Initialize sensors
         colorSensor = hwMap.get(ColorSensor.class, "bcs");  // R1 I2C 0 REV Color
         //some motors needs to be reverse to drive strait - sets the motors to their identification position
-        motor_left_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        motor_left_front.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
-        motor_right_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        motor_right_front.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        motor_elevator.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motor_left_back.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        motor_left_front.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors(we have placed it in reverse)
+        motor_right_back.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        motor_right_front.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        motor_elevator.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         cubePickUp_left.setDirection(DcMotorSimple.Direction.REVERSE);
         cubePickUp_right.setDirection(DcMotorSimple.Direction.REVERSE);
         motor_elevator_twist.setDirection(DcMotorSimple.Direction.FORWARD);

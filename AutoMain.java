@@ -140,29 +140,13 @@ public abstract class AutoMain extends LinearOpMode {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if (isBlue) {
             if (leftSide) {
-                driveStraitWithEncoder(FORWORD_SPEED, 2000);
-                turnWithEncoder(90, -FORWORD_SPEED);
-                driveStraitWithEncoder(FORWORD_SPEED, 750);
-                turnWithEncoder(90, FORWORD_SPEED);
-                driveStraitWithEncoder(FORWORD_SPEED, 500);
-                robot.cubePickUpSpeed(1.0);
-                sleep(2000);
-                robot.cubePickUpSpeed(0.0);
-                driveStraitWithEncoder(-FORWORD_SPEED, 200);
+
             }
-
             else {
-                driveStraitWithEncoder(-FORWORD_SPEED, 1500);
-                turnWithEncoder(90, -FORWORD_SPEED);
-                driveStraitWithEncoder(-FORWORD_SPEED, 1500);
-                robot.cubePickUpSpeed(1.0);
-                sleep(2000);
-                robot.cubePickUpSpeed(0.0);
-                driveStraitWithEncoder(-FORWORD_SPEED, 200);
-
-
-
-
+                gyroDrive(-0.3, 3000, 0);
+                gyroTurn(-0.3, -90);
+                gyroHold(-0.3, -90, 0.5);
+                gyroDrive(-0.3, 1500, 90);
             }
 
         }
