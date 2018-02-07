@@ -35,6 +35,8 @@ public abstract class AutoMain extends LinearOpMode {
 
     HardwareConnection robot = new HardwareConnection(); // Calls for a hardware.
 
+    RelicRecoveryVuMark columnByPhoto = RelicRecoveryVuMark.UNKNOWN;
+
     // A function to initialize the hardware and the photo reader.
     public void connectionInit() {
         robot.init(hardwareMap);
@@ -43,17 +45,19 @@ public abstract class AutoMain extends LinearOpMode {
 
     // The main autonomous code - uses the boolean values from the "sub" classes and the code uses them to modify the autonomous code.
     void connectionRun(boolean isBlue, boolean leftSide) {
-
         telemetry.addData("version: ", "6"); // Just to know when the code is ready to run.
         telemetry.update();
+        connectionInit();
 
         waitForStart();
+
         robot.prepareForStart();
         dropBall(isBlue); // The first step in autonomous - dropping the ball of the opposite color.
-        RelicRecoveryVuMark column = readPhoto(); // Second step in autonomous - reading the pictograph for putting the cube in the Cryptobox
-        moveToCryptoBox(isBlue, leftSide, column); // Third step in autonomous - driving to the correct column
-        putCube(column); // Last step in autonomous - dropping the cube in the correct column and getting ready for teleop
-
+        if (columnByPhoto == RelicRecoveryVuMark.UNKNOWN){
+            columnByPhoto = RelicRecoveryVuMark.CENTER;
+        }
+        moveToCryptoBox(isBlue, leftSide); // Third step in autonomous - driving to the correct column
+        putCube(); // Last step in autonomous - dropping the cube in the correct column and getting ready for teleop
     }
 
     // Move the ball with the other color aside.
@@ -61,17 +65,17 @@ public abstract class AutoMain extends LinearOpMode {
         boolean isBallBlue = false;
         // TODO(): itay.s.
         robot.ballHandTurn.setPosition(0.55);// makes sure that the hand is in the middle.
-        sleep(500); // Delay for making sure its not going to much.
+        waitAndReadPhoto(500); // Delay for making sure its not going to much.
         robot.ballHandLift.setPosition(0.3); // Drops the ball hand with slowly with delay between for a slow drop.
-        sleep(500);
+        waitAndReadPhoto(500);
         robot.ballHandLift.setPosition(0.6);
-        sleep(500);
+        waitAndReadPhoto(500);
         robot.ballHandLift.setPosition(0.8);
-        sleep(500);
+        waitAndReadPhoto(500);
         robot.ballHandLift.setPosition(0.9);
-        sleep(500);
+        waitAndReadPhoto(500);
         robot.ballHandLift.setPosition(1.0); //Now its between the jewels.
-        sleep(1000); // Waits for the sensors to see color.
+        waitAndReadPhoto(1000); // Waits for the sensors to see color.
 
         boolean foundColor = false; // For making sure the sensor saw the color
         ElapsedTime runtime = new ElapsedTime();
@@ -97,45 +101,47 @@ public abstract class AutoMain extends LinearOpMode {
             } else {
                 robot.ballHandTurn.setPosition(0.4);//drop the red ball
             }
-            sleep(1000);
+            waitAndReadPhoto(1000);
         }
 
 
         //robot.ballHandTurn.setPosition(0.4);
-        //sleep(500);
+        //waitAndReadPhoto(500);
         //robot.ballHandTurn.setPosition(0.5);
-        //sleep(500);
+        //waitAndReadPhoto(500);
         robot.ballHandLift.setPosition(0.5);
-        sleep(2000);
+        waitAndReadPhoto(2000);
         robot.ballHandTurn.setPosition(0.55);
 
-        sleep(1000);
+        waitAndReadPhoto(1000);
 
         robot.ballHandLift.setPosition(0.3);
-        sleep(1000);
+        waitAndReadPhoto(1000);
         robot.ballHandTurn.setPosition(0.05);
-        sleep(1000);
+        waitAndReadPhoto(1000);
         robot.ballHandLift.setPosition(0.2);
-        sleep(1000);
+        waitAndReadPhoto(1000);
         robot.ballHandLift.setPosition(0.1);
-        sleep(1000);
+        waitAndReadPhoto(1000);
     }
 
     // Read photo and return the column to put the cube in.
-    public RelicRecoveryVuMark readPhoto() {
-        //relicTrackables.activate();
+    public void waitAndReadPhoto(int miliseconds) {
+        relicTrackables.activate();
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
-        while (opModeIsActive()) {
-            RelicRecoveryVuMark column = readPhoto();
-            telemetry.addData("VuMark", "%s visible", column);
-            telemetry.update();
+        while (opModeIsActive() && runtime.milliseconds() < miliseconds ) {
+            if (columnByPhoto == RelicRecoveryVuMark.UNKNOWN) {
+                columnByPhoto = RelicRecoveryVuMark.from(relicTemplate);
+                telemetry.addData("VuMark", "%s visible", columnByPhoto);
+                telemetry.update();
+            }
+            idle();
         }
-        return RelicRecoveryVuMark.UNKNOWN;
     }
 
     // Move to crypto box
-    private void moveToCryptoBox(boolean isBlue, boolean leftSide, RelicRecoveryVuMark column) {
+    private void moveToCryptoBox(boolean isBlue, boolean leftSide) {
         // TODO(): implement.
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if (isBlue) {
@@ -160,7 +166,7 @@ public abstract class AutoMain extends LinearOpMode {
     }
 
     // Put the cube
-    private void putCube(RelicRecoveryVuMark column) {
+    private void putCube() {
         // TODO(): implement.
 
 

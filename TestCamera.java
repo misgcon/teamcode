@@ -19,7 +19,7 @@ public class TestCamera extends AutoMain {
         waitForStart();
 
         while (opModeIsActive()) {
-            RelicRecoveryVuMark column = readPhoto();
+            RelicRecoveryVuMark column = RelicRecoveryVuMark.from(relicTemplate);
             telemetry.addData("VuMark", "%s visible", column);
             telemetry.update();
         }
