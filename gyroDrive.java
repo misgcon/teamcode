@@ -93,17 +93,18 @@ public class gyroDrive extends AutoMain {
         */
 
         //new method try
-        driveStraitWithEncoder(0.2, 1000);
+
         gyroDrive(-0.3, -3715, 0);
         gyroTurn(0.3, 90);
         gyroHold(0.3, 90, 0.5);
         gyroDrive(-0.3, 600, 0);
+        driveStraitWithEncoder(0.2, 1000);
         robot.motor_elevator_twist.setPower(-0.3);
         sleep(1000);
         robot.motor_elevator_twist.setPower(0.3);
         sleep(1000);
         robot.motor_elevator_twist.setPower(0.0);
         sleep(1000);
-        gyroDrive(-0.3, 400, 90);
+        gyroDrive(0.3, 400, 90);
     }
 }
