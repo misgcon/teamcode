@@ -23,7 +23,7 @@ public class gyroDrive extends AutoMain {
         final int MIDDLE_TICKS = -3710;// works for red left
         final int LEFT_TICKS = -4420;// works for red left
         final int RIGHT_TICKS = -2840;//works but only tested once for red left
-
+//
 
         waitForStart();
         //Red Left - works!
