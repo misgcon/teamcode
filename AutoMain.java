@@ -64,24 +64,24 @@ public abstract class AutoMain extends LinearOpMode {
     public void dropBall(boolean isBlue) {
         boolean isBallBlue = false;
         // TODO(): itay.s.
-        robot.ballHandTurn.setPosition(0.55);// makes sure that the hand is in the middle.
+        robot.ballHandTurn.setPosition(0.8);// makes sure that the hand is in the middle.
         waitAndReadPhoto(500); // Delay for making sure its not going to much.
-        robot.ballHandLift.setPosition(0.3); // Drops the ball hand with slowly with delay between for a slow drop.
-        waitAndReadPhoto(500);
         robot.ballHandLift.setPosition(0.6);
         waitAndReadPhoto(500);
-        robot.ballHandLift.setPosition(0.8);
+        robot.ballHandTurn.setPosition(0.55);
         waitAndReadPhoto(500);
+        robot.ballHandLift.setPosition(0.7);
+        waitAndReadPhoto(300);
         robot.ballHandLift.setPosition(0.9);
         waitAndReadPhoto(500);
         robot.ballHandLift.setPosition(1.0); //Now its between the jewels.
-        waitAndReadPhoto(1000); // Waits for the sensors to see color.
 
         boolean foundColor = false; // For making sure the sensor saw the color
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
-        // Waits another second for the sensor to see the color.
+        // Waits a second for the sensor to see the color.
         while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+            waitAndReadPhoto(1);
             // Uses two Conditions for making sure the sensor saw the correct color and sent correct value.
             if (robot.colorSensor.red() > robot.colorSensor.blue() && robot.colorSensor.red() > 30){
                 isBallBlue = false; // For dropping the ball.
@@ -101,7 +101,7 @@ public abstract class AutoMain extends LinearOpMode {
             } else {
                 robot.ballHandTurn.setPosition(0.4);//drop the red ball
             }
-            waitAndReadPhoto(1000);
+            waitAndReadPhoto(500);
         }
 
 
@@ -110,19 +110,19 @@ public abstract class AutoMain extends LinearOpMode {
         //robot.ballHandTurn.setPosition(0.5);
         //waitAndReadPhoto(500);
         robot.ballHandLift.setPosition(0.5);
-        waitAndReadPhoto(2000);
+        waitAndReadPhoto(500);
         robot.ballHandTurn.setPosition(0.55);
 
         waitAndReadPhoto(1000);
 
         robot.ballHandLift.setPosition(0.3);
-        waitAndReadPhoto(1000);
+        waitAndReadPhoto(500);
         robot.ballHandTurn.setPosition(0.05);
-        waitAndReadPhoto(1000);
+        waitAndReadPhoto(500);
         robot.ballHandLift.setPosition(0.2);
-        waitAndReadPhoto(1000);
+        waitAndReadPhoto(500);
         robot.ballHandLift.setPosition(0.1);
-        waitAndReadPhoto(1000);
+        waitAndReadPhoto(500);
     }
 
     // Read photo and return the column to put the cube in.

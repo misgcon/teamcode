@@ -20,90 +20,21 @@ public class gyroDrive extends AutoMain {
         connectionInit();
         robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        int angle = 90;
-        //blue right - works!
+        final int MIDDLE_TICKS = -3710;// works for red left
+        final int LEFT_TICKS = -4420;// works for red left
+        final int RIGHT_TICKS = -2840;//works but only tested once for red left
+
+
         waitForStart();
-        /*
-        driveStraitWithEncoder(0.2, 1000);
-        gyroDrive(-0.3, 3730, 0);
-        gyroTurn(0.3, 90);
-        gyroHold(0.3, 90, 0.5);
-        gyroDrive(-0.3, 800, 90);
-        gyroDrive(-0.3, -570, 90);
-        robot.motor_elevator_twist.setPower(-0.5);
-        sleep(1000);
-        robot.motor_elevator_twist.setPower(0.5);
-        sleep(1000);
-        robot.motor_elevator_twist.setPower(0.0);
-        sleep(1000);
-        gyroDrive(-0.3, -200, 90);
-        */
+        //Red Left - works!
 
-        //blue left - not tested
-        /*
-        gyroDrive(-0.3, 2500, 0);
-        gyroTurn(0.3, 90);
-        gyroHold(0.3, 90, 0.5);
-        gyroDrive(-0.3, 1500, 90);
-        gyroTurn(0.3, 180);
-        gyroHold(0.3, 180, 0.5);
-        gyroDrive(-0.3, 1000, 180);
-        robot.motor_elevator_twist.setPower(-0.5);
-        sleep(1000);
-        robot.motor_elevator_twist.setPower(0.5);
-        sleep(1000);
-        robot.motor_elevator_twist.setPower(0.0);
-        sleep(1000);
-        gyroDrive(-0.3, -200, 90);
-        */
-
-        //red left - not tested
-        /*
-        driveStraitWithEncoder(0.2, 1000);
-        gyroDrive(-0.3, -3715, 0);
-        gyroTurn(0.3, 80);
-        gyroHold(0.3, 80, 0.5);
-        gyroDrive(-0.3, 800, 85);
-        gyroDrive(-0.3, -500, 85);
-        robot.motor_elevator_twist.setPower(-0.5);
-        sleep(1000);
-        robot.motor_elevator_twist.setPower(0.5);
-        sleep(1000);
-        robot.motor_elevator_twist.setPower(0.0);
-        sleep(1000);
-        gyroDrive(-0.3, -200, 80);
-*/
-
-        //red right
-        /*
-        gyroDrive(-0.3, 2500, 0);
-        gyroTurn(0.3, 90);
-        gyroHold(0.3, 90, 0.5);
-        gyroDrive(-0.3, 1500, 90);
-        gyroTurn(0.3, 180);
-        gyroHold(0.3, 180, 0.5);
-        gyroDrive(-0.3, 1000, 180);
-        robot.motor_elevator_twist.setPower(-0.5);
-        sleep(1000);
-        robot.motor_elevator_twist.setPower(0.5);
-        sleep(1000);
-        robot.motor_elevator_twist.setPower(0.0);
-        sleep(1000);
-        gyroDrive(-0.3, -200, 90);
-        */
-
-        //new method try
-        driveStraitWithEncoder(0.2, 1000);
-        gyroDrive(-0.3, -3715, 0);
-        gyroTurn(0.3, 90);
-        gyroHold(0.3, 90, 0.5);
-        gyroDrive(-0.3, 600, 0);
-        robot.motor_elevator_twist.setPower(-0.3);
-        sleep(1000);
-        robot.motor_elevator_twist.setPower(0.3);
-        sleep(1000);
-        robot.motor_elevator_twist.setPower(0.0);
-        sleep(1000);
-        gyroDrive(-0.3, 400, 90);
+        gyroDrive(-0.3, RIGHT_TICKS, 0);
+        gyroTurn(0.3, -90);
+        gyroHold(0.3, -90, 0.5);
+        gyroDrive(-0.3, -600, -90);
+        robot.cubePickUpSpeed(-1.0);
+        gyroDrive(-0.3, -1100, -90);
+        robot.cubePickUpSpeed(0.0);
+        gyroDrive(-0.3, 600, -90);
     }
 }
