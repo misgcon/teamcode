@@ -20,9 +20,9 @@ public class gyroDrive extends AutoMain {
         connectionInit();
         robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        final int MIDDLE_TICKS_LEFT_R = -3710;// works for red left
-        final int LEFT_TICKS_LEFT_R = -4420;// works for red left
-        final int RIGHT_TICKS_LEFT_R = -2800;//works red left
+        final int MIDDLE_TICKS_LEFT_R = -3260;// works for red left
+        final int LEFT_TICKS_LEFT_R = -4280;// works for red left
+        final int RIGHT_TICKS_LEFT_R = -2400;//works red left
         final int MIDDLE_TICKS_RIGHT_R = -1760;// works for red left
         final int LEFT_TICKS_RIGHT_R = -2485;// works for red left
         final int RIGHT_TICKS_RIGHT_R = -800;//works red left
@@ -38,8 +38,8 @@ public class gyroDrive extends AutoMain {
 
         waitForStart();
         //Red Left - works!
-        /*
-        gyroDrive(-0.3, LEFT_TICKS, 0);
+
+        gyroDrive(-0.3, LEFT_TICKS_LEFT_R, 0);
         gyroTurn(0.3, -90);
         gyroHold(0.3, -90, 0.5);
         gyroDrive(-0.3, -600, -90);
@@ -47,7 +47,7 @@ public class gyroDrive extends AutoMain {
         gyroDrive(-0.3, -1100, -90);
         robot.cubePickUpSpeed(0.0);
         gyroDrive(-0.3, 600, -90);
-        */
+
 
         //red right - works!
         /*
@@ -65,6 +65,7 @@ public class gyroDrive extends AutoMain {
         robot.cubePickUpSpeed(0.0);
         */
 
+        /*
         gyroDrive(-0.3, 3400, 0);
         gyroTurn(0.3, 90);
         gyroHold(0.3, 90, 0.5);
@@ -77,7 +78,7 @@ public class gyroDrive extends AutoMain {
         robot.cubePickUpSpeed(0.0);
         gyroDrive(-0.3, 480, 180);
         robot.cubePickUpSpeed(0.0);
-
+        */
 
     }
 }

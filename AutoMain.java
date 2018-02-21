@@ -28,6 +28,7 @@ public abstract class AutoMain extends LinearOpMode {
     static final double HEADING_THRESHOLD = 1 ; // For the Gyro sensor.
     static final double P_TURN_COEFF = 0.1; // For the Gyro sensor.
     static final double P_DRIVE_COEFF = 0.15; // For the Gyro sensor.
+    int finalTicks = 0;
 
     VuforiaLocalizer vuforia;
     VuforiaTrackable relicTemplate;
@@ -52,19 +53,20 @@ public abstract class AutoMain extends LinearOpMode {
         waitForStart();
 
         robot.prepareForStart();
-        dropBall(isBlue); // The first step in autonomous - dropping the ball of the opposite color.
+        dropBall(isBlue); // The first part in autonomous - dropping the ball of the opposite color AND reads the PictoGraph while dropping the balls.
+
         if (columnByPhoto == RelicRecoveryVuMark.UNKNOWN){
             columnByPhoto = RelicRecoveryVuMark.CENTER;
         }
-        moveToCryptoBox(isBlue, leftSide); // Third step in autonomous - driving to the correct column
-        putCube(); // Last step in autonomous - dropping the cube in the correct column and getting ready for teleop
+        moveToCryptoBox(isBlue, leftSide); // Last part  in autonomous - driving to the correct column and puts the cube in the right column.
     }
 
     // Move the ball with the other color aside.
     public void dropBall(boolean isBlue) {
+        relicTrackables.activate();
         boolean isBallBlue = false;
         // TODO(): itay.s.
-        robot.ballHandTurn.setPosition(0.8);// makes sure that the hand is in the middle.
+        robot.ballHandTurn.setPosition(0.8);// makes sure that the hand is in the starting position.
         waitAndReadPhoto(500); // Delay for making sure its not going to much.
         robot.ballHandLift.setPosition(0.6);
         waitAndReadPhoto(500);
@@ -127,7 +129,6 @@ public abstract class AutoMain extends LinearOpMode {
 
     // Read photo and return the column to put the cube in.
     public void waitAndReadPhoto(int miliseconds) {
-        relicTrackables.activate();
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
         while (opModeIsActive() && runtime.milliseconds() < miliseconds ) {
@@ -146,32 +147,98 @@ public abstract class AutoMain extends LinearOpMode {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if (isBlue) {
             if (leftSide) {
-
+                if (columnByPhoto == RelicRecoveryVuMark.LEFT) {
+                    finalTicks = -2485;
+                }
+                if (columnByPhoto == RelicRecoveryVuMark.RIGHT) {
+                    finalTicks = -800;
+                }
+                if (columnByPhoto == RelicRecoveryVuMark.CENTER) {
+                    finalTicks = -1760;
+                }
             }
-            else {
-                gyroDrive(-0.3, 3000, 0);
-                gyroTurn(-0.3, -90);
-                gyroHold(-0.3, -90, 0.5);
-                gyroDrive(-0.3, 1500, 90);
+            else if (!leftSide){
+                if (columnByPhoto == RelicRecoveryVuMark.LEFT) {
+                    finalTicks = -4420;
+                }
+                if (columnByPhoto == RelicRecoveryVuMark.RIGHT) {
+                    finalTicks = -2800;
+                }
+                if (columnByPhoto == RelicRecoveryVuMark.CENTER) {
+                    finalTicks = -3710;
+                }
             }
 
         }
-        else //if not blue aka;<red> {
+        else if (!isBlue)//if not blue aka;<red> {
             if (leftSide) {
-
+                if (columnByPhoto == RelicRecoveryVuMark.LEFT) {
+                    finalTicks = -4280;
+                }
+                if (columnByPhoto == RelicRecoveryVuMark.RIGHT) {
+                    finalTicks = -2400;
+                }
+                if (columnByPhoto == RelicRecoveryVuMark.CENTER) {
+                    finalTicks = -3260;
+                }
             }
-            else {
-
+            else if (!leftSide){
+                if (columnByPhoto == RelicRecoveryVuMark.LEFT) {
+                    finalTicks = -2485;
+                }
+                if (columnByPhoto == RelicRecoveryVuMark.RIGHT) {
+                    finalTicks = -800;
+                }
+                if (columnByPhoto == RelicRecoveryVuMark.CENTER) {
+                    finalTicks = -1760;
+                }
             }
+           if (isBlue){
+                if (leftSide){
+                    gyroDrive(-0.3, 3400, 0);
+                    gyroTurn(0.3, 90);
+                    gyroHold(0.3, 90, 0.5);
+                    gyroDrive(-0.3, finalTicks - 190, 90);
+                    gyroTurn(0.3, 180);
+                    gyroHold(0.3, 180, 0.5);
+                    gyroDrive(-0.3, -800, 180);
+                    robot.cubePickUpSpeed(-1.0);
+                    gyroDrive(-0.3, -1000, 180);
+                    robot.cubePickUpSpeed(0.0);
+                    gyroDrive(-0.3, 480, 180);
+                    robot.cubePickUpSpeed(0.0);
+                }
+                else if (!leftSide){
+
+                }
+           }
+           else if (!isBlue){
+               if (leftSide){
+                   gyroDrive(-0.3, finalTicks, 0);
+                   gyroTurn(0.3, -90);
+                   gyroHold(0.3, -90, 0.5);
+                   gyroDrive(-0.3, -600, -90);
+                   robot.cubePickUpSpeed(-1.0);
+                   gyroDrive(-0.3, -1100, -90);
+                   robot.cubePickUpSpeed(0.0);
+                   gyroDrive(-0.3, 600, -90);
+               }
+               else if (!leftSide){
+                   gyroDrive(-0.3, -2500, 0);
+                   gyroTurn(0.3, 90);
+                   gyroHold(0.3, 90, 0.5);
+                   gyroDrive(-0.3, finalTicks, 90);
+                   gyroTurn(0.3, 0);
+                   gyroHold(0.3, 0, 0.5);
+                   gyroDrive(-0.3, -700, 90);
+                   robot.cubePickUpSpeed(-1.0);
+                   gyroDrive(-0.3, -800, 0);
+                   robot.cubePickUpSpeed(0.0);
+                   gyroDrive(-0.3, 480, 0);
+                   robot.cubePickUpSpeed(0.0);
+               }
+           }
     }
-
-    // Put the cube
-    private void putCube() {
-        // TODO(): implement.
-
-
-    }
-
     //init vuforia
     public void initVuforia() {
 
