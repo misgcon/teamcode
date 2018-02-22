@@ -148,10 +148,10 @@ public abstract class AutoMain extends LinearOpMode {
         if (isBlue) {
             if (leftSide) {
                 if (columnByPhoto == RelicRecoveryVuMark.LEFT) {
-                    finalTicks = -2485;
+                    finalTicks = -690;
                 }
                 if (columnByPhoto == RelicRecoveryVuMark.RIGHT) {
-                    finalTicks = -800;
+                    finalTicks = -2545;
                 }
                 if (columnByPhoto == RelicRecoveryVuMark.CENTER) {
                     finalTicks = -1760;
@@ -165,7 +165,7 @@ public abstract class AutoMain extends LinearOpMode {
                     finalTicks = -2800;
                 }
                 if (columnByPhoto == RelicRecoveryVuMark.CENTER) {
-                    finalTicks = -3710;
+                    finalTicks = -4250;
                 }
             }
 
@@ -193,51 +193,58 @@ public abstract class AutoMain extends LinearOpMode {
                     finalTicks = -1760;
                 }
             }
-           if (isBlue){
-                if (leftSide){
-                    gyroDrive(-0.3, 3400, 0);
-                    gyroTurn(0.3, 90);
-                    gyroHold(0.3, 90, 0.5);
-                    gyroDrive(-0.3, finalTicks - 190, 90);
-                    gyroTurn(0.3, 180);
-                    gyroHold(0.3, 180, 0.5);
-                    gyroDrive(-0.3, -800, 180);
-                    robot.cubePickUpSpeed(-1.0);
-                    gyroDrive(-0.3, -1000, 180);
-                    robot.cubePickUpSpeed(0.0);
-                    gyroDrive(-0.3, 480, 180);
-                    robot.cubePickUpSpeed(0.0);
-                }
-                else if (!leftSide){
+        if (isBlue){
+            if (leftSide){
+                gyroDrive(-0.3, 3650, 0);
+                gyroTurn(0.3, 90);
+                gyroHold(0.3, 90, 0.5);
+                gyroDrive(-0.3, finalTicks - 190, 90);
+                gyroTurn(0.3, 180);
+                gyroHold(0.3, 180, 0.5);
+                gyroDrive(-0.3, -800, 180);
+                robot.cubePickUpSpeed(-1.0);
+                gyroDrive(-0.3, -1000, 180);
+                gyroDrive(-0.3, 480, 180);
+                robot.cubePickUpSpeed(0.0);
+            }
+            else if (!leftSide){
+                gyroDrive(-0.3, -finalTicks, 0);
+                gyroTurn(0.3, -90);
+                gyroHold(0.3, -90, 0.5);
+                gyroDrive(-0.3, -600, -90);
+                robot.cubePickUpSpeed(-1.0);
+                gyroDrive(-0.3, -1100, -90);
+                gyroDrive(-0.3, 600, -90);
+                robot.cubePickUpSpeed(0.0);
+            }
+        }
+        else if (!isBlue){
+            if (leftSide){
+                gyroDrive(-0.3, finalTicks, 0);
+                gyroTurn(0.3, 90);
+                gyroHold(0.3, 90, 0.5);
+                gyroDrive(-0.3, 600, 90);
+                robot.cubePickUpSpeed(-1.0);
+                gyroDrive(-0.3, 1100, 90);
+                gyroDrive(-0.3, -600, 90);
+                robot.cubePickUpSpeed(0.0);
 
-                }
-           }
-           else if (!isBlue){
-               if (leftSide){
-                   gyroDrive(-0.3, finalTicks, 0);
-                   gyroTurn(0.3, -90);
-                   gyroHold(0.3, -90, 0.5);
-                   gyroDrive(-0.3, -600, -90);
-                   robot.cubePickUpSpeed(-1.0);
-                   gyroDrive(-0.3, -1100, -90);
-                   robot.cubePickUpSpeed(0.0);
-                   gyroDrive(-0.3, 600, -90);
-               }
-               else if (!leftSide){
-                   gyroDrive(-0.3, -2500, 0);
-                   gyroTurn(0.3, 90);
-                   gyroHold(0.3, 90, 0.5);
-                   gyroDrive(-0.3, finalTicks, 90);
-                   gyroTurn(0.3, 0);
-                   gyroHold(0.3, 0, 0.5);
-                   gyroDrive(-0.3, -700, 90);
-                   robot.cubePickUpSpeed(-1.0);
-                   gyroDrive(-0.3, -800, 0);
-                   robot.cubePickUpSpeed(0.0);
-                   gyroDrive(-0.3, 480, 0);
-                   robot.cubePickUpSpeed(0.0);
-               }
-           }
+            }
+            else if (!leftSide){
+                gyroDrive(-0.3, -2500, 0);
+                gyroTurn(0.3, 90);
+                gyroHold(0.3, 90, 0.5);
+                gyroDrive(-0.3, finalTicks, 90);
+                gyroTurn(0.3, 0);
+                gyroHold(0.3, 0, 0.5);
+                gyroDrive(-0.3, -700, 90);
+                robot.cubePickUpSpeed(-1.0);
+                gyroDrive(-0.3, -800, 0);
+                robot.cubePickUpSpeed(0.0);
+                gyroDrive(-0.3, 480, 0);
+                robot.cubePickUpSpeed(0.0);
+            }
+        }
     }
     //init vuforia
     public void initVuforia() {
@@ -337,7 +344,7 @@ public abstract class AutoMain extends LinearOpMode {
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
-          //  robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //  robot.setMotorDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             // Determine new target position, and pass to motor controller
             //moveCounts = (int)(distance * COUNTS_PER_INCH);
