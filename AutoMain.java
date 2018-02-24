@@ -107,10 +107,7 @@ public abstract class AutoMain extends LinearOpMode {
         }
 
 
-        //robot.ballHandTurn.setPosition(0.4);
-        //waitAndReadPhoto(500);
-        //robot.ballHandTurn.setPosition(0.5);
-        //waitAndReadPhoto(500);
+
         robot.ballHandLift.setPosition(0.5);
         waitAndReadPhoto(500);
         robot.ballHandTurn.setPosition(0.55);
@@ -154,18 +151,18 @@ public abstract class AutoMain extends LinearOpMode {
                     finalTicks = -2545;
                 }
                 if (columnByPhoto == RelicRecoveryVuMark.CENTER) {
-                    finalTicks = -1760;
+                    finalTicks = -1700;
                 }
             }
             else if (!leftSide){
                 if (columnByPhoto == RelicRecoveryVuMark.LEFT) {
-                    finalTicks = -4420;
+                    finalTicks = -4010;
                 }
                 if (columnByPhoto == RelicRecoveryVuMark.RIGHT) {
-                    finalTicks = -2800;
+                    finalTicks = -5600;
                 }
                 if (columnByPhoto == RelicRecoveryVuMark.CENTER) {
-                    finalTicks = -4250;
+                    finalTicks = -4740;
                 }
             }
 
@@ -204,7 +201,7 @@ public abstract class AutoMain extends LinearOpMode {
                 gyroDrive(-0.3, -800, 180);
                 robot.cubePickUpSpeed(-1.0);
                 gyroDrive(-0.3, -1000, 180);
-                gyroDrive(-0.3, 480, 180);
+                gyroDrive(-0.3, 520, 180);
                 robot.cubePickUpSpeed(0.0);
             }
             else if (!leftSide){
@@ -214,19 +211,19 @@ public abstract class AutoMain extends LinearOpMode {
                 gyroDrive(-0.3, -600, -90);
                 robot.cubePickUpSpeed(-1.0);
                 gyroDrive(-0.3, -1100, -90);
-                gyroDrive(-0.3, 600, -90);
+                gyroDrive(-0.3, 640, -90);
                 robot.cubePickUpSpeed(0.0);
             }
         }
         else if (!isBlue){
             if (leftSide){
                 gyroDrive(-0.3, finalTicks, 0);
-                gyroTurn(0.3, 90);
-                gyroHold(0.3, 90, 0.5);
-                gyroDrive(-0.3, 600, 90);
+                gyroTurn(0.3, -90);
+                gyroHold(0.3, -90, 0.5);
+                gyroDrive(-0.3, -600, -90);
                 robot.cubePickUpSpeed(-1.0);
-                gyroDrive(-0.3, 1100, 90);
-                gyroDrive(-0.3, -600, 90);
+                gyroDrive(-0.3, -1100, -90);
+                gyroDrive(-0.3, 640, -90);
                 robot.cubePickUpSpeed(0.0);
 
             }
@@ -241,7 +238,7 @@ public abstract class AutoMain extends LinearOpMode {
                 robot.cubePickUpSpeed(-1.0);
                 gyroDrive(-0.3, -800, 0);
                 robot.cubePickUpSpeed(0.0);
-                gyroDrive(-0.3, 480, 0);
+                gyroDrive(-0.3, 520, 0);
                 robot.cubePickUpSpeed(0.0);
             }
         }
