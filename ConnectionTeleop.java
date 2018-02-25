@@ -48,7 +48,6 @@ public class ConnectionTeleop extends OpMode  {
     private double speedDecrease = 1.5;
     private boolean reverse = false;
     private boolean reverese_pressed = false;
-    private double speed_of_cubeSpin = 0.5;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -81,19 +80,19 @@ public class ConnectionTeleop extends OpMode  {
             twist = -0.3;//this drops the twister
         } else if (gamepad2.dpad_down) {//is true if the lower button in dpad is pressed
             twist = 0.3;//this elevates the twister
-        } else {//if none of the ubove buttons are pressed
+        } else {//if none of the above buttons are pressed
             twist = 0;//set two starting possition
         }
         robot.motor_elevator_twist.setPower(twist);//this changes the position of the thing that throws the cubes into the crypto box
 
         //reverse toggle
         if (gamepad1.y) {//if the 'y' button is pressed
-            if (!reverese_pressed) {//if this is the first milisecond that it is pressed
-                reverse = !reverse;//reverse equals to the false if true and true if false
-                reverese_pressed = true;//this is equivalent to:"this isn't the first milisecond that 'y' is pressed"
+            if (!reverese_pressed) { //if this is the first milisecond that it is pressed
+                reverse = !reverse; //reverse equals to the false if true and true if false
+                reverese_pressed = true; //this is equivalent to:"this isn't the first milisecond that 'y' is pressed"
             }
         } else {//if 'y' is not pressed
-            reverese_pressed = false;//reset to this statment:"this is the first milisecond that it is pressed"
+            reverese_pressed = false;//reset to this statement:"this is the first milisecond that it is pressed"
         }
        /* reverses the controls*/
         if (reverse) {
@@ -107,7 +106,7 @@ public class ConnectionTeleop extends OpMode  {
         robot.motor_elevator.setPower(-up);
 
         //toggles the spin
-        if (gamepad2.right_bumper){//if the right bumper pressed then you reverse the spin this is the same like the reverse ubove
+        if (gamepad2.right_bumper){ //if the right bumper pressed then you reverse the spin this is the same like the reverse ubove
             if (!spin_pressed){
                 spin = !spin;
                 spin_pressed = true;
@@ -117,11 +116,7 @@ public class ConnectionTeleop extends OpMode  {
             spin_pressed = false;
         }
 
-//        if (spin){
-//            robot.cubePickUp_right.setPower(-speed_of_cubeSpin);
-//            robot.cubePickUp_left.setPower(speed_of_cubeSpin);
-//        }
-/*this changes the left_pickup to suck in or to throw out the cube*/
+        /*this changes the left_pickup to suck in or to throw out the cube*/
         double pick_left = 0;
         if (gamepad1.left_trigger > 0.3) {
             pick_left = -0.5;
@@ -129,7 +124,7 @@ public class ConnectionTeleop extends OpMode  {
             pick_left = 0.5;
         }
         robot.cubePickUp_left.setPower(pick_left);
-/*this changes the right_pickup to suck in or to throw out the cube*/
+        /*this changes the right_pickup to suck in or to throw out the cube*/
         double pick_right = 0;
         if (gamepad1.right_trigger > 0.3) {
             pick_right = 0.5;

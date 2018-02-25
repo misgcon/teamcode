@@ -55,6 +55,7 @@ public abstract class AutoMain extends LinearOpMode {
         robot.prepareForStart();
         dropBall(isBlue); // The first part in autonomous - dropping the ball of the opposite color AND reads the PictoGraph while dropping the balls.
 
+        //if for some reason it didn't read the photo, it automatically goes for the middle column
         if (columnByPhoto == RelicRecoveryVuMark.UNKNOWN){
             columnByPhoto = RelicRecoveryVuMark.CENTER;
         }
@@ -67,7 +68,7 @@ public abstract class AutoMain extends LinearOpMode {
         boolean isBallBlue = false;
         // TODO(): itay.s.
         robot.ballHandTurn.setPosition(0.8);// makes sure that the hand is in the starting position.
-        waitAndReadPhoto(500); // Delay for making sure its not going to much.
+        waitAndReadPhoto(500); // Delay for making sure its not going too much.
         robot.ballHandLift.setPosition(0.6);
         waitAndReadPhoto(500);
         robot.ballHandTurn.setPosition(0.55);
@@ -96,18 +97,18 @@ public abstract class AutoMain extends LinearOpMode {
             }
         }
         idle();
-
+        //so if it didn't see any color, it wouldn't drop the wrong ball
         if (foundColor) {
-            if (isBlue == isBallBlue) {//if you are blue and the ball is blue
-                robot.ballHandTurn.setPosition(0.7);//drop the blue ball that ur facing
+            if (isBlue == isBallBlue) {//if you are blue and the ball is blue or if you are red and the ball is red (they will both be false)
+                robot.ballHandTurn.setPosition(0.7);//drop the ball behind the color sensor
             } else {
-                robot.ballHandTurn.setPosition(0.4);//drop the red ball
+                robot.ballHandTurn.setPosition(0.4);//drop the ball in front of the sensor
             }
             waitAndReadPhoto(500);
         }
 
 
-
+        //goes to final position
         robot.ballHandLift.setPosition(0.5);
         waitAndReadPhoto(500);
         robot.ballHandTurn.setPosition(0.55);
@@ -142,6 +143,7 @@ public abstract class AutoMain extends LinearOpMode {
     private void moveToCryptoBox(boolean isBlue, boolean leftSide) {
         // TODO(): implement.
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //these loops set the correct tick value for driving th the correct column according to the pictoGraph
         if (isBlue) {
             if (leftSide) {
                 if (columnByPhoto == RelicRecoveryVuMark.LEFT) {
@@ -190,6 +192,8 @@ public abstract class AutoMain extends LinearOpMode {
                     finalTicks = -1760;
                 }
             }
+
+        //now these loops are for driving to the correct column
         if (isBlue){
             if (leftSide){
                 gyroDrive(-0.3, 3650, 0);
@@ -282,7 +286,6 @@ public abstract class AutoMain extends LinearOpMode {
         robot.setAllMotorDrivePower(0);
     }
 
-    // just as a placeHolder, 1 degree of spin is 5 ticks, to turn left its positive degrees and to turn right its negative.
     void turnWithEncoder(int degree, double speed) {
         robot.setMotorDriveMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.resetEncoder();

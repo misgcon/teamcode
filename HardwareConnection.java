@@ -99,7 +99,7 @@ public class HardwareConnection {
         cubePickUp_right.setPower(0);
         cubePickUp_left.setPower(0);
         motor_elevator_twist.setPower(0);
-        //sets the dcmotors that don't use incoder to 'RUN_WITHOUT_ENCODER'
+        //sets the dcmotors that don't use encoder to 'RUN_WITHOUT_ENCODER'
         //setMotorDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor_elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         cubePickUp_left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
